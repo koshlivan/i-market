@@ -1,15 +1,25 @@
 <template>
     <div class="wrapper">
+        <Header></Header>
         <Home></Home>
+        <my-footer></my-footer>
     </div>
 </template>
 
 <script>
 import Home from './Home';
+import Header from './Header';
+import MyFooter from "./Footer/Footer";
+import AboutSkills from "./AboutComponents/Skills";
+import AboutDoings from "./AboutComponents/Doings";
     export default {
         name: 'App',
         components: {
-            Home
+            AboutDoings,
+            AboutSkills,
+            MyFooter,
+            Home,
+            Header
         },
     }
 </script>
@@ -24,7 +34,7 @@ import Home from './Home';
         font-weight: 400;
         letter-spacing: 0.5px;
         line-height: 24px;
-        background-color: #1a1e21;
+        background-color: black;
     }
 
 collection-dropdown:hover .collection-dropdown-menu{

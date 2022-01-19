@@ -1,0 +1,65 @@
+<template>
+    <div class="side-menu-holder">
+        <h3>top category</h3>
+        <a v-for="(category, index) in categories"
+           :key="index"
+           :href="category.link" >{{category.name}}</a>
+        <a href="#">
+            <img src="assets/SideMenu/side.jpg" alt="">
+        </a>
+    </div>
+</template>
+
+<script>
+export default {
+    name: "side-menu",
+    data(){
+        return {
+            categories: [
+                {link : '#', name: 'Smartphones'},
+                {link : '#', name: 'Boots'},
+                {link : '#', name: 'Autoparts'},
+                {link : '#', name: 'Cattles'},
+                {link : '#', name: 'Motobikes'},
+            ]
+        }
+    }
+}
+</script>
+
+<style scoped>
+.side-menu-holder {
+    margin: 2rem 0.5rem;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    max-width: 28%;
+}
+h3 {
+    text-transform: uppercase;
+    font-weight: bolder;
+    color: white;
+    border-bottom: solid 2px rgb(66, 66, 66);
+}
+a {
+    text-transform: capitalize;
+    text-decoration: none;
+    color: rgb(156, 156, 156);
+    padding-top: 0.5rem;
+    padding-bottom: 0.2rem;
+    border-bottom: dotted 1px rgb(66, 66, 66);
+}
+a:hover {
+    cursor: pointer;
+    color: #e53a53;
+}
+a:active {
+    color: #790b30;
+}
+img {
+    max-width: 100%;
+    margin: 0.5rem 0;
+}
+</style>

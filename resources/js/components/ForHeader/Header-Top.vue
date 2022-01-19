@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-8">
                     <ul class="header-top-right text-right">
-                        <li class="account"><a href="login.html">My Account</a></li>
+                        <li class="account"><a href="#">My Account</a></li>
                         <li class="language dropdown align"> <span
                             class="dropdown-toggle"
                             id="dropdownMenu1"

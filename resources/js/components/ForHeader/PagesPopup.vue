@@ -1,9 +1,9 @@
 <template>
     <ul class="dropdown-menu" @mouseover="$emit('mouseover')" @mouseleave="$emit('mouseleave')">
-        <li> <a href="cart_page.html">Cart</a></li>
-        <li> <a href="checkout_page.html">Checkout</a></li>
-        <li> <a href="product_detail_page.html">Product Detail Page</a></li>
-        <li> <a href="single_blog.html">Single Post</a></li>
+        <li> <a href="#">Cart</a></li>
+        <li> <a href="#">Checkout</a></li>
+        <li> <a href="#">Product Detail Page</a></li>
+        <li> <a href="#">Single Post</a></li>
     </ul>
 </template>
 
