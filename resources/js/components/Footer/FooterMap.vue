@@ -3,11 +3,11 @@
         <div class="map-holder">
             <ul>
                 <li><h3>information</h3></li>
-                <li><a href="#">about us</a></li>
+                <li><router-link tag="a" class="link-to" to="/about">About Us</router-link></li>
                 <li><a href="#">delivery information</a></li>
                 <li><a href="#">privacy policy</a></li>
                 <li><a href="#">terms and conditions</a></li>
-                <li><a href="#">contact us</a></li>
+                <li><router-link tag="a" class="link-to" to="/contacts">Contact Us</router-link></li>
             </ul>
             <ul>
                 <li><h3>services</h3></li>

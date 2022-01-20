@@ -1,9 +1,9 @@
 <template>
     <div class="product-navigator">
-        <h3>{{heading}}</h3>
+        <h3><slot></slot></h3>
         <div class="filters">
-            <div><span class="material-icons">arrow_back_ios</span></div>
-            <div><span class="material-icons">arrow_forward_ios</span></div>
+            <div @click="$event('lineMove', false)"><span class="material-icons">arrow_back_ios</span></div>
+            <div @click="$event('lineMove', true)"><span class="material-icons">arrow_forward_ios</span></div>
         </div>
     </div>
 </template>
@@ -11,8 +11,8 @@
 <script>
 export default {
     name: "navigator",
-    props: [
-        'heading'
+    emits: [
+        'lineMove'
     ]
 }
 </script>

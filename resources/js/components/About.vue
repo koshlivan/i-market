@@ -1,16 +1,19 @@
 <template>
     <div class="container">
         <div class="wrapper">
-            <side-menu></side-menu>
+            <div class="side-menu">
+                <side-menu></side-menu>
+            </div>
             <div class="about-info">
                 <img src="assets/About/dafoe.jpg" alt="">
                 <h2>the mini Design is nice way to stole design variant</h2>
                 <p>{{blaBla}}</p>
                 <button>hire me</button>
-                <div class="carts">
+                <div class="carts row">
                     <about-doings></about-doings>
                     <about-skills></about-skills>
                 </div>
+                <team></team>
             </div>
         </div>
     </div>
@@ -20,9 +23,11 @@
 import SideMenu from "./SideMenu/SideMenu";
 import AboutDoings from "./AboutComponents/Doings";
 import AboutSkills from "./AboutComponents/Skills";
+import Team from "./AboutComponents/Team";
 export default {
     name: "About",
     components: {
+        Team,
         SideMenu,
         AboutDoings,
         AboutSkills
@@ -43,5 +48,52 @@ export default {
     align-items: flex-start;
     margin-top: 1.5rem;
 }
-
+.side-menu{
+    width: 28%;
+}
+.about-info {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+.about-info img {
+    max-width: 100%;
+    margin-top: 3rem;
+}
+.about-info h2 {
+    margin-top: 1.5rem;
+    padding-left: 0.5rem;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+.about-info p {
+    text-indent: 2rem;
+    text-align: justify;
+}
+.about-info button {
+    max-width: 6rem;
+    height: 3rem;
+    background-color: #424242;
+    text-transform: uppercase;
+    color: white;
+    border: none;
+}
+.about-info button:hover {
+    background-color: #626262;
+    text-shadow: 0 0 3px white;
+}
+.about-info button:active {
+    background-color: #222222;
+    color: #424242;
+}
+.carts {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: stretch;
+    height: 25rem;
+    overflow: hidden;
+}
 </style>

@@ -12,7 +12,7 @@ export default {
 
 <style scoped>
     .cap {
-        margin-top: 0.5rem;
+        margin: 1rem 0;
         border-bottom: solid 2px rgb(66, 66, 66);
     }
     h3 {

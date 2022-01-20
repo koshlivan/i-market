@@ -114,8 +114,8 @@ export default {
     background-color: #e53a53;
 }
 #Slider {
-    width: 100%;
-    margin-top: 4rem;
+    width: 90%;
+    margin: 2.5rem 3rem 2rem 1rem;
     border: solid 4px white;
 }
 </style>

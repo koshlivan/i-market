@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <navigator :heading="heading"></navigator>
+        <navigator>latest news</navigator>
         <div class="news-holder">
             <news-card v-for="(singleNew, index) in news"
                        :key="index"
@@ -17,7 +17,6 @@ export default {
     components: {NewsCard, Navigator},
     data(){
         return {
-            heading: 'latest news',
             news: [
                 {image : 'assets/News/rich.jpg',
                     day : '13',

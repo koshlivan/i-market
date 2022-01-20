@@ -10,13 +10,18 @@
         </div>
         <p class="description">{{product.description}}</p>
         <h3 class="price">{{product.price}}</h3>
+        <div class="product-actions">
+            <product-menu></product-menu>
+        </div>
     </div>
 
 </template>
 
 <script>
+import ProductMenu from "./ProductMenu";
 export default {
     name: "product-preview",
+    components: {ProductMenu},
     props: [
        'product'
     ],
@@ -31,6 +36,8 @@ export default {
 <style scoped>
 .product-card {
     max-width: 15rem;
+    position: relative;
+    overflow-x: hidden;
 }
 .product-card img{
     max-width: 100%;
@@ -47,5 +54,14 @@ export default {
 }
 .rated{
     color: #e53a53;
+}
+.product-actions {
+    position: absolute;
+    transition: 500ms;
+    top: 0;
+    left: -5rem;
+}
+.product-card:hover .product-actions{
+    transform: translateX(100px);
 }
 </style>

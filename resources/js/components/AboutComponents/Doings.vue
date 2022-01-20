@@ -1,5 +1,5 @@
 <template>
-    <div class="holder">
+    <div class="holder col-6">
         <about-cap>what we do?</about-cap>
         <div class="accordion" id="accordionExample">
             <div class="accordion-item">

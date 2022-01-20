@@ -4,6 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+
 require('./bootstrap');
 
 window.Vue = require('vue').default;
@@ -21,13 +22,16 @@ window.Vue = require('vue').default;
 
 //Vue.component('App', require('./components/App.vue').default);
 import App from './components/App';
-
+//import VueGoogleMaps from '@fawmi/vue-google-maps'
 import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
 
 import Home from './components/Home';
 import About from './components/About';
+import ContactUs from './components/ContactUs';
+import ShopThe from "./components/ShopThe";
+
 
 const router = new VueRouter( {
     mode: 'history',
@@ -41,7 +45,17 @@ const router = new VueRouter( {
             path: '/about',
             name: 'about',
             component: About
-        }
+        },
+        {
+            path: '/contacts',
+            name: 'contacts',
+            component: ContactUs
+        },
+        {
+            path: '/shop',
+            name: 'shop',
+            component: ShopThe
+        },
     ]
 })
 
@@ -52,3 +66,8 @@ const app = new Vue({
     },
     router
 });
+// app.use(VueGoogleMaps, {
+//     load: {
+//         key: '',
+//     },
+// }).mount('#app')

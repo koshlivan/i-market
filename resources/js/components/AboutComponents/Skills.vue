@@ -1,14 +1,16 @@
 <template>
-    <div class="holder">
+    <div class="holder col-6">
         <about-cap>skills</about-cap>
-        <div class="carts"
-             v-for="(cart, index) in carts"
-             :key="index">
-            <div class="cart-self">
-                <p class="technology">{{cart.name}}</p>
-                <p class="percent">{{cart.progress}}</p>
-                <div class="progress"
-                     :style="{'background' : cart.cartColor, 'width': cart.progress}"></div>
+        <div class="cart-keeper">
+            <div class="carts"
+                 v-for="(cart, index) in carts"
+                 :key="index">
+                <div class="cart-self">
+                    <p class="technology">{{cart.name}}</p>
+                    <p class="percent">{{cart.progress}}</p>
+                    <div class="progress"
+                         :style="{'background' : cart.cartColor, 'width': cart.progress}"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -34,6 +36,14 @@ export default {
 </script>
 
 <style scoped>
+.cart-keeper{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    max-height: 100%;
+    min-height: 70%;
+}
 .cart-self {
     width: 100%;
     margin: 0.2rem 0;

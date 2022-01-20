@@ -1,14 +1,14 @@
 <template>
     <nav class="navbar">
             <ul id="menu" class="nav navbar-nav">
-                <li> <a href="index.html">Home</a></li>
+                <li> <router-link tag="a" class="link-to" to="/">Home</router-link></li>
                 <li class="collection-dropdown">
                     <a href="#"
                        @mouseleave="collectionButHide"
                        @mouseover="collectionButShow">Collection
                     </a>
                 </li>
-                <li> <a href="category_page.html">Shop</a></li>
+                <li> <router-link tag="a" class="link-to" to="/shop">Shop</router-link></li>
                 <li> <a href="blog_page.html">Blog</a></li>
                 <li class="dropdown">
                     <a href="#"
@@ -17,8 +17,8 @@
                     </a>
 
                 </li>
-                <li> <a href="about.html">About us</a></li>
-                <li> <a href="contact_us.html">Contact us</a></li>
+                <li> <router-link tag="a" class="link-to" to="/about">About Us</router-link></li>
+                <li><router-link tag="a" class="link-to" to="/contacts">Contact Us</router-link></li>
             </ul>
         <collection-popup v-show="collectionHover" @mouseover="collectionPopupShow" @mouseleave="collectionPopupHide"></collection-popup>
         <pages-popup v-show="pagesHover" @mouseover="pagesPopupShow" @mouseleave="pagesPopupHide"></pages-popup>

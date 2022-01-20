@@ -4,6 +4,7 @@
         <a v-for="(category, index) in categories"
            :key="index"
            :href="category.link" >{{category.name}}</a>
+        <slot></slot>
         <a href="#">
             <img src="assets/SideMenu/side.jpg" alt="">
         </a>
@@ -35,7 +36,7 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
-    max-width: 28%;
+    width: 100%;
 }
 h3 {
     text-transform: uppercase;

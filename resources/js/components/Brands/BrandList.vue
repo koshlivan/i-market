@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <navigator :heading="heading"></navigator>
+        <navigator>brand logo</navigator>
         <div class="logos-container">
             <div class="logo-holder"
                  v-for="(logo, index) in logos"
@@ -18,7 +18,6 @@ export default {
     components: {Navigator},
     data(){
         return {
-            heading : 'brand logo',
             logos : ['assets/BrandLogos/brand1.png',
                      'assets/BrandLogos/brand2.png',
                     'assets/BrandLogos/brand3.png',
