@@ -1,6 +1,6 @@
 <template>
     <div class="product-card">
-        <img :src="product.image" alt="product">
+        <img :src="image" alt="product" @mouseover="imgHover" @mouseleave="imgBack">
         <div class="stars">
             <div v-for="(star, index) in stars">
                 <div :class="{'rated' : index < product.stars}">
@@ -27,7 +27,16 @@ export default {
     ],
     data(){
         return {
-             stars : 5
+             stars : 5,
+            image: this.product.image
+        }
+    },
+    methods: {
+        imgHover(){
+            this.image = this.product.image2;
+        },
+        imgBack(){
+            this.image = this.product.image;
         }
     }
 }
@@ -42,6 +51,9 @@ export default {
 .product-card img{
     max-width: 100%;
     max-height: 100%;
+}
+img {
+    transition: 200ms;
 }
 .stars {
     display: flex;

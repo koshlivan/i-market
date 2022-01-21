@@ -21,7 +21,7 @@ export default {
             preferences: [
                 {name: 'color', options: ['red', 'blue', 'white', 'pink']},
                 {name: 'size', options: ['big', 'medium', 'small', 'like your ex has']},
-                {name: 'prestige', options: ['hobo', 'luxury', 'regular', 'teenage']},
+                {name: 'prestige', options: ['hobbo', 'luxury', 'regular', 'teenage']},
             ]
         }
     }

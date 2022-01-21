@@ -61,7 +61,7 @@ export default {
                         { sign : '<i class="fab fa-pinterest-square"></i>', link : 'http://www.instagram.com'},
                     ]
                 },
-                {image : 'assets/Team/tm1.jpg',
+                {image : 'assets/Team/tm1.jpeg',
                     prophecy : 'developer',
                     name : 'sebastian',
                     about : 'over 1k projects behind, 5+ is average grade',
@@ -88,14 +88,14 @@ export default {
 
 <style scoped>
     .swiper {
-        overflow-x: hidden;
         width: 100%;
         height: 100%;
     }
     .team-card-keeper {
+        overflow: auto;
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: flex-start;
         align-items: stretch;
         transition: 500ms;
     }

@@ -1,11 +1,11 @@
 <template>
-    <div class="container">
+    <div class="brand-list">
         <navigator>brand logo</navigator>
         <div class="logos-container">
             <div class="logo-holder"
                  v-for="(logo, index) in logos"
                  :key="index">
-                <img :src="logos[index]" alt="">
+                <img :src="logos[index]" alt="brand-logo">
             </div>
         </div>
     </div>
@@ -34,15 +34,18 @@ export default {
 </script>
 
 <style scoped>
+.brand-list {
+    width: 100%;
+}
 .logos-container{
     width: 100%;
     max-height: 10rem;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    flex-wrap: nowrap;
+    justify-content: space-between;
     align-items: stretch;
     margin: 1.5rem 0;
+    overflow-x: auto;
 }
 .logo-holder {
     max-height: 100%;

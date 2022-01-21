@@ -3,6 +3,7 @@
         <Header></Header>
         <router-view></router-view>
         <my-footer></my-footer>
+        <go-to-top @goToTop="topFunction"></go-to-top>
     </div>
 </template>
 
@@ -12,15 +13,23 @@ import Header from './Header';
 import MyFooter from "./Footer/Footer";
 import AboutSkills from "./AboutComponents/Skills";
 import AboutDoings from "./AboutComponents/Doings";
+import GoToTop from "./GoToTopButton";
     export default {
         name: 'App',
         components: {
+            GoToTop,
             AboutDoings,
             AboutSkills,
             MyFooter,
             Home,
             Header
         },
+        methods :{
+            topFunction() {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+        }
     }
 </script>
 

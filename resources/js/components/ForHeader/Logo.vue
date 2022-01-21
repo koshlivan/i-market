@@ -9,9 +9,9 @@
             </div>
         </div>
         <div class="navbar-header col-xs-6 col-sm-4 justify-content-center" >
-            <a class="navbar-brand" href="Home">
+            <router-link tag="a" class="link-to navbar-brand" to="/">
                 <img alt="themini" src="assets/logo.png">
-            </a>
+            </router-link>
         </div>
         <logo-cart></logo-cart>
     </div>

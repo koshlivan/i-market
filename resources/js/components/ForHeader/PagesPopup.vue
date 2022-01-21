@@ -1,8 +1,8 @@
 <template>
     <ul class="dropdown-menu" @mouseover="$emit('mouseover')" @mouseleave="$emit('mouseleave')">
-        <li> <a href="#">Cart</a></li>
+        <li> <router-link tag="a" class="link-to" to="/cart">Cart</router-link></li>
         <li> <a href="#">Checkout</a></li>
-        <li> <a href="#">Product Detail Page</a></li>
+        <li> <router-link tag="a" class="link-to" to="/product/1">Product Detail Page</router-link></li>
         <li> <a href="#">Single Post</a></li>
     </ul>
 </template>

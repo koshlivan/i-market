@@ -6,7 +6,9 @@
         <fashion-show></fashion-show>
         <week-deals></week-deals>
         <latest-news></latest-news>
-        <brand-list></brand-list>
+        <div class="container">
+            <brand-list></brand-list>
+        </div>
     </div>
 </template>
 

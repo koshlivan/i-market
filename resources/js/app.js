@@ -1,9 +1,3 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 
 require('./bootstrap');
 
@@ -31,6 +25,9 @@ import Home from './components/Home';
 import About from './components/About';
 import ContactUs from './components/ContactUs';
 import ShopThe from "./components/ShopThe";
+import RegistrationLogin from "./components/RegistrationLogin";
+import ProductReview from "./components/ProductReview";
+import Cart from "./components/Cart";
 
 
 const router = new VueRouter( {
@@ -55,6 +52,21 @@ const router = new VueRouter( {
             path: '/shop',
             name: 'shop',
             component: ShopThe
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: RegistrationLogin
+        },
+        {
+            path: '/product/1',
+            name: 'product',
+            component: ProductReview
+        },
+        {
+            path: '/cart',
+            name: 'cart',
+            component: Cart
         },
     ]
 })
