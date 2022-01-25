@@ -31,6 +31,7 @@ export default {
         flex-direction: column;
         justify-content: space-between;
         align-items: stretch;
+        scroll-snap-align: start;
     }
     img {
         filter: grayscale(100%);

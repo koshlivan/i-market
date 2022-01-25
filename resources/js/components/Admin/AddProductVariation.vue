@@ -2,7 +2,7 @@
     <div class="add-product-variation">
             <label>Image for variation:</label>
             <input type="file" id="optionImage">
-            <input type="text" placeholder="Difference option" v-model="difference">
+            <input type="text" placeholder="Difference option" v-model="difference" @blur="$emit('optionChange', difference)">
     </div>
 </template>
 
@@ -17,16 +17,6 @@ export default {
             difference: ''
         }
     },
-    computed: {
-        options: {
-            get() {
-                return this.difference;
-            },
-            set(value) {
-                this.$emit('optionChange', value);
-            }
-        }
-    }
 }
 </script>
 

@@ -59,7 +59,7 @@ export default {
     data() {
         return {
             categories: [],
-            options: [],
+            option: '',
             pickedCategory: 0,
             name: '',
             price: 0,
@@ -90,7 +90,7 @@ export default {
                     console.log(response.data);
                     this.product_id = response.data.id;
                     let option = {
-                        name: this.options[0],
+                        name: this.option,
                         image: this.modalImage,
                         master: this.product_id
                     }
@@ -133,7 +133,7 @@ export default {
                 .catch(error => console.log(error))
         },
         optionChange(event) {
-            this.options.push(event);
+            this.option = event;
         }
     }
 }

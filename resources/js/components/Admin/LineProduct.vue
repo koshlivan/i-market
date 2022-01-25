@@ -2,7 +2,7 @@
     <div class="line-product">
         <div class="self-row">
             <div class="table-cell">
-                <img :src="product.image" alt="Prod image">
+                <img :src="product.options[0].image" alt="Prod image">
             </div>
             <div class="table-cell">
                 <h5>{{product.name}}</h5>
@@ -26,10 +26,11 @@
                 <h5>{{product.description}}</h5>
             </div>
             <div class="table-cell">
-                <h5>{{product.options}}</h5>
+                <p v-for="(option, index) in product.options"
+                   :key="option.id">{{option.name}}</p>
             </div>
             <div class="table-cell">
-                <h5>{{}}</h5>
+                <h5></h5>
             </div>
         </div>
         <div class="self-row" v-show="isEditShow">
@@ -58,17 +59,16 @@
                 <textarea type="text" v-model="descriptioning" rows="3"></textarea>
             </div>
             <div class="table-cell">
-                <p v-for="(option, index) in product.options"
-                    :key="option.id">{{option.id}}</p>
+
             </div>
             <div class="table-cell">
                 <h5>{{}}</h5>
             </div>
         </div>
         <div class="actions">
-            <button @click="showEditWindow"><i class="fas fa-arrow-up"></i>edit</button>
+            <button @click="showEditWindow"><i class="fas fa-arrow-up"></i>edit<i class="fas fa-arrow-up"></i></button>
             <button @click="saveEdited" v-show="isEditShow"><i class="fas fa-arrow-up"></i>Save Changes</button>
-            <button @click="deleteOne"><i class="fas fa-arrow-up"></i>delete</button>
+            <button @click="deleteOne"><i class="fas fa-arrow-up"></i>delete<i class="fas fa-arrow-up"></i></button>
 
         </div>
     </div>
@@ -198,12 +198,17 @@ export default {
     }
 .table-cell {
     display: flex;
+    flex-direction: column;
     width: 100%;
     justify-content: center;
     align-items: center;
     border-right: solid 1px gray;
     padding: 2px;
     overflow: auto;
+}
+.table-cell img {
+    max-width: 100%;
+    max-height: 100%;
 }
 .table-cell h5 {
     text-transform: capitalize;
@@ -238,7 +243,7 @@ button:last-child:active {
     background-color: #580b11;
 }
 button i{
-    margin-right: 0.5rem;
+    margin: 0 0.5rem;
 }
 input {
     width: 100%;

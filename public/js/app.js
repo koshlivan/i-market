@@ -5760,16 +5760,6 @@ __webpack_require__.r(__webpack_exports__);
     return {
       difference: ''
     };
-  },
-  computed: {
-    options: {
-      get: function get() {
-        return this.difference;
-      },
-      set: function set(value) {
-        this.$emit('optionChange', value);
-      }
-    }
   }
 });
 
@@ -6278,7 +6268,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       categories: [],
-      options: [],
+      option: '',
       pickedCategory: 0,
       name: '',
       price: 0,
@@ -6313,7 +6303,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response.data);
         _this2.product_id = response.data.id;
         var option = {
-          name: _this2.options[0],
+          name: _this2.option,
           image: _this2.modalImage,
           master: _this2.product_id
         };
@@ -6358,7 +6348,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     optionChange: function optionChange(event) {
-      this.options.push(event);
+      this.option = event;
     }
   }
 });
@@ -14760,7 +14750,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.swiper[data-v-10ff2218] {\n    width: 100%;\n    height: 100%;\n}\n.team-card-keeper[data-v-10ff2218] {\n    overflow: auto;\n    display: flex;\n    flex-direction: row;\n    justify-content: flex-start;\n    align-items: stretch;\n    transition: 500ms;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.swiper[data-v-10ff2218] {\n    width: 100%;\n    height: 100%;\n}\n.team-card-keeper[data-v-10ff2218] {\n    overflow: auto;\n    -ms-scroll-snap-type: x;\n        scroll-snap-type: x;\n    scroll-behavior: smooth;\n    display: flex;\n    flex-direction: row;\n    justify-content: flex-start;\n    align-items: stretch;\n    transition: 500ms;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -14928,7 +14918,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.line-product[data-v-49d7bb20]{\n    display: flex;\n    flex-direction: column;\n    justify-content: flex-start;\n    align-items: stretch;\n}\n.self-row[data-v-49d7bb20] {\n        width: 100%;\n        height: 5rem;\n        display: flex;\n        flex-direction: row;\n        justify-content: stretch;\n        align-items: stretch;\n        border: solid 2px gray;\n}\n.table-cell[data-v-49d7bb20] {\n    display: flex;\n    width: 100%;\n    justify-content: center;\n    align-items: center;\n    border-right: solid 1px gray;\n    padding: 2px;\n    overflow: auto;\n}\n.table-cell h5[data-v-49d7bb20] {\n    text-transform: capitalize;\n}\nbutton[data-v-49d7bb20] {\n        text-transform: uppercase;\n        padding: 0.6rem 2rem;\n        margin-bottom: 0.2rem;\n}\nbutton[data-v-49d7bb20]:first-child {\n        background-color: coral;\n        color: white;\n}\nbutton[data-v-49d7bb20]:first-child:hover {\n    cursor: pointer;\n    background-color: #f5a68a;\n}\nbutton[data-v-49d7bb20]:first-child:active {\n    cursor: pointer;\n    background-color: #9c4121;\n}\nbutton[data-v-49d7bb20]:last-child {\n    background-color: red;\n    color: white;\n}\nbutton[data-v-49d7bb20]:last-child:hover {\n    cursor: pointer;\n    background-color: #c27584;\n}\nbutton[data-v-49d7bb20]:last-child:active {\n    cursor: pointer;\n    background-color: #580b11;\n}\nbutton i[data-v-49d7bb20]{\n    margin-right: 0.5rem;\n}\ninput[data-v-49d7bb20] {\n    width: 100%;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.line-product[data-v-49d7bb20]{\n    display: flex;\n    flex-direction: column;\n    justify-content: flex-start;\n    align-items: stretch;\n}\n.self-row[data-v-49d7bb20] {\n        width: 100%;\n        height: 5rem;\n        display: flex;\n        flex-direction: row;\n        justify-content: stretch;\n        align-items: stretch;\n        border: solid 2px gray;\n}\n.table-cell[data-v-49d7bb20] {\n    display: flex;\n    flex-direction: column;\n    width: 100%;\n    justify-content: center;\n    align-items: center;\n    border-right: solid 1px gray;\n    padding: 2px;\n    overflow: auto;\n}\n.table-cell img[data-v-49d7bb20] {\n    max-width: 100%;\n    max-height: 100%;\n}\n.table-cell h5[data-v-49d7bb20] {\n    text-transform: capitalize;\n}\nbutton[data-v-49d7bb20] {\n        text-transform: uppercase;\n        padding: 0.6rem 2rem;\n        margin-bottom: 0.2rem;\n}\nbutton[data-v-49d7bb20]:first-child {\n        background-color: coral;\n        color: white;\n}\nbutton[data-v-49d7bb20]:first-child:hover {\n    cursor: pointer;\n    background-color: #f5a68a;\n}\nbutton[data-v-49d7bb20]:first-child:active {\n    cursor: pointer;\n    background-color: #9c4121;\n}\nbutton[data-v-49d7bb20]:last-child {\n    background-color: red;\n    color: white;\n}\nbutton[data-v-49d7bb20]:last-child:hover {\n    cursor: pointer;\n    background-color: #c27584;\n}\nbutton[data-v-49d7bb20]:last-child:active {\n    cursor: pointer;\n    background-color: #580b11;\n}\nbutton i[data-v-49d7bb20]{\n    margin: 0 0.5rem;\n}\ninput[data-v-49d7bb20] {\n    width: 100%;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -16201,7 +16191,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.holder[data-v-a863d536] {\n    max-width: 28%;\n    margin: 0 0.5rem;\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n    align-items: stretch;\n}\nimg[data-v-a863d536] {\n    filter: grayscale(100%);\n}\nimg[data-v-a863d536]:hover {\n    filter: grayscale(0%);\n}\n.soc-keeper[data-v-a863d536] {\n    display: flex;\n    flex-direction: row;\n    justify-content: flex-start;\n    align-items: stretch;\n    margin-bottom: 4rem;\n}\n.soc-holder[data-v-a863d536] {\n    margin: 0 0.2rem;\n    padding: 0.7rem 1rem;\n    background-color: white;\n    border-radius: 2px;\n}\nh6[data-v-a863d536], h5[data-v-a863d536] {\n    margin-top: 0.5rem;\n    text-transform: uppercase;\n}\na[data-v-a863d536] {\n    color:rgb(66, 66, 66);\n    background-color: white;\n    font-size: 20px;\n}\na[data-v-a863d536]:hover{\n    color: black;\n    cursor: pointer;\n}\na span[data-v-a863d536]{\n    vertical-align: middle;\n    padding-bottom: 0.6rem;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.holder[data-v-a863d536] {\n    max-width: 28%;\n    margin: 0 0.5rem;\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n    align-items: stretch;\n    scroll-snap-align: start;\n}\nimg[data-v-a863d536] {\n    filter: grayscale(100%);\n}\nimg[data-v-a863d536]:hover {\n    filter: grayscale(0%);\n}\n.soc-keeper[data-v-a863d536] {\n    display: flex;\n    flex-direction: row;\n    justify-content: flex-start;\n    align-items: stretch;\n    margin-bottom: 4rem;\n}\n.soc-holder[data-v-a863d536] {\n    margin: 0 0.2rem;\n    padding: 0.7rem 1rem;\n    background-color: white;\n    border-radius: 2px;\n}\nh6[data-v-a863d536], h5[data-v-a863d536] {\n    margin-top: 0.5rem;\n    text-transform: uppercase;\n}\na[data-v-a863d536] {\n    color:rgb(66, 66, 66);\n    background-color: white;\n    font-size: 20px;\n}\na[data-v-a863d536]:hover{\n    color: black;\n    cursor: pointer;\n}\na span[data-v-a863d536]{\n    vertical-align: middle;\n    padding-bottom: 0.6rem;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -42285,6 +42275,9 @@ var render = function () {
       attrs: { type: "text", placeholder: "Difference option" },
       domProps: { value: _vm.difference },
       on: {
+        blur: function ($event) {
+          return _vm.$emit("optionChange", _vm.difference)
+        },
         input: function ($event) {
           if ($event.target.composing) {
             return
@@ -42673,7 +42666,9 @@ var render = function () {
   return _c("div", { staticClass: "line-product" }, [
     _c("div", { staticClass: "self-row" }, [
       _c("div", { staticClass: "table-cell" }, [
-        _c("img", { attrs: { src: _vm.product.image, alt: "Prod image" } }),
+        _c("img", {
+          attrs: { src: _vm.product.options[0].image, alt: "Prod image" },
+        }),
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "table-cell" }, [
@@ -42707,9 +42702,14 @@ var render = function () {
         _c("h5", [_vm._v(_vm._s(_vm.product.description))]),
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "table-cell" }, [
-        _c("h5", [_vm._v(_vm._s(_vm.product.options))]),
-      ]),
+      _c(
+        "div",
+        { staticClass: "table-cell" },
+        _vm._l(_vm.product.options, function (option, index) {
+          return _c("p", { key: option.id }, [_vm._v(_vm._s(option.name))])
+        }),
+        0
+      ),
       _vm._v(" "),
       _vm._m(0),
     ]),
@@ -42856,14 +42856,7 @@ var render = function () {
           }),
         ]),
         _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "table-cell" },
-          _vm._l(_vm.product.options, function (option, index) {
-            return _c("p", { key: option.id }, [_vm._v(_vm._s(option.id))])
-          }),
-          0
-        ),
+        _c("div", { staticClass: "table-cell" }),
         _vm._v(" "),
         _vm._m(2),
       ]
@@ -42873,6 +42866,7 @@ var render = function () {
       _c("button", { on: { click: _vm.showEditWindow } }, [
         _c("i", { staticClass: "fas fa-arrow-up" }),
         _vm._v("edit"),
+        _c("i", { staticClass: "fas fa-arrow-up" }),
       ]),
       _vm._v(" "),
       _c(
@@ -42894,6 +42888,7 @@ var render = function () {
       _c("button", { on: { click: _vm.deleteOne } }, [
         _c("i", { staticClass: "fas fa-arrow-up" }),
         _vm._v("delete"),
+        _c("i", { staticClass: "fas fa-arrow-up" }),
       ]),
     ]),
   ])
@@ -42903,9 +42898,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "table-cell" }, [
-      _c("h5", [_vm._v("{{}}")]),
-    ])
+    return _c("div", { staticClass: "table-cell" }, [_c("h5")])
   },
   function () {
     var _vm = this

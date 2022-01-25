@@ -12,7 +12,7 @@ class ProductOption extends Model
     protected $fillable = [
         'product_id',
         'image',
-        'option'
+        'name'
     ];
 
     public function  product()

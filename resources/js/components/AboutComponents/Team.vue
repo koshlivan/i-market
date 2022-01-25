@@ -93,6 +93,8 @@ export default {
     }
     .team-card-keeper {
         overflow: auto;
+        scroll-snap-type: x;
+        scroll-behavior: smooth;
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
