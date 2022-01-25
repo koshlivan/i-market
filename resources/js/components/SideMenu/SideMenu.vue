@@ -3,7 +3,7 @@
         <h3>top category</h3>
         <a v-for="(category, index) in categories"
            :key="index"
-           :href="category.link" >{{category.name}}</a>
+           href="#" >{{category.name}}</a>
         <slot></slot>
         <a href="#">
             <img src="assets/SideMenu/side.jpg" alt="">
@@ -16,15 +16,16 @@ export default {
     name: "side-menu",
     data(){
         return {
-            categories: [
-                {link : '#', name: 'Smartphones'},
-                {link : '#', name: 'Boots'},
-                {link : '#', name: 'Autoparts'},
-                {link : '#', name: 'Cattles'},
-                {link : '#', name: 'Motobikes'},
-            ]
+            categories: []
         }
+    },
+    created() {
+        axios.get('api/categories')
+            .then(response => {
+                this.categories = response.data;
+            })
     }
+
 }
 </script>
 

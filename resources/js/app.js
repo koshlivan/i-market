@@ -1,4 +1,3 @@
-
 require('./bootstrap');
 
 window.Vue = require('vue').default;
@@ -28,6 +27,7 @@ import ShopThe from "./components/ShopThe";
 import RegistrationLogin from "./components/RegistrationLogin";
 import ProductReview from "./components/ProductReview";
 import Cart from "./components/Cart";
+import Admin from "./components/Admin";
 
 
 const router = new VueRouter( {
@@ -68,6 +68,11 @@ const router = new VueRouter( {
             name: 'cart',
             component: Cart
         },
+        {
+            path: '/admin',
+            name: 'admin',
+            component: Admin
+        }
     ]
 })
 

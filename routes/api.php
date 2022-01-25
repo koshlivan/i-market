@@ -2,6 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\ProductController;
+use \App\Http\Controllers\ReviewController;
+use \App\Http\Controllers\OrderController;
+use \App\Http\Controllers\ProductOptionController;
+use \App\Http\Controllers\CategoryController;
+use \App\Http\Controllers\AttachmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +23,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::apiResources([
+    'products' => ProductController::class,
+    'product-options' => ProductOptionController::class,
+    'reviews' => ReviewController::class,
+    'orders' => OrderController::class,
+    'categories' => CategoryController::class,
+
+]);
+Route::put('api/attachments', 'AttachmentController@store');

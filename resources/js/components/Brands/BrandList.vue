@@ -46,13 +46,19 @@ export default {
     align-items: stretch;
     margin: 1.5rem 0;
     overflow-x: auto;
+    scroll-snap-type: x;
+    scroll-behavior: smooth;
 }
 .logo-holder {
     max-height: 100%;
     opacity: 60%;
+    scroll-snap-align: start;
 }
 .logo-holder:hover {
     cursor: pointer;
     opacity: 100%;
+}
+img {
+
 }
 </style>

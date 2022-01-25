@@ -9,6 +9,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-8">
                     <ul class="header-top-right text-right">
+                        <li><router-link tag="a" class="link-to" to="/admin">Admin management</router-link></li>
                         <li class="account"><router-link tag="a" class="link-to" to="/login">Account</router-link></li>
                         <li class="language dropdown align"> <span
                             class="dropdown-toggle"
