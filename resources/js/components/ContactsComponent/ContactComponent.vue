@@ -28,7 +28,7 @@
                 <input type="submit" value="send message">
             </form>
         </div>
-        <div id="google-map">
+        <div id="google-map" ref="googleMap">
             Google Maps
             <div class="spinner">
                 <div class="spinner-border" role="status">
@@ -43,6 +43,16 @@
 
 export default {
     name: "contact-component",
+    methods: {
+        myMap() {
+            let mapCanvas = this.$refs.googleMap;
+            let mapOptions = {
+                center: new google.maps.LatLng(51.5, -0.2),
+                zoom: 10
+            };
+            let map = new google.maps.Map(mapCanvas, mapOptions);
+        }
+    }
 
 }
 </script>

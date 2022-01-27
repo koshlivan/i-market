@@ -28,9 +28,12 @@ h5  {
     font-weight: 600;
 }
 .adder {
+    position: fixed;
+    right: 2rem;
+    bottom: 10%;
     margin: 1rem;
-    width: 3rem;
-    height: 3rem;
+    width: 4rem;
+    height: 4rem;
     border-radius: 50%;
     background-color: green;
     color: white;
@@ -38,6 +41,7 @@ h5  {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1;
 }
 .adder:hover {
     background-color: #5fbf5f;

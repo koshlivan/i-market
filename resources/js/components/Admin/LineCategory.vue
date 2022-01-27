@@ -39,6 +39,7 @@ export default {
     methods : {
         editClick() {
             this.isEditing = true;
+            window.scroll(0, 0);
         },
         saveClick() {
             axios.put('api/categories/'+this.category.id, {

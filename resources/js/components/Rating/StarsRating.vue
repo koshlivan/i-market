@@ -1,7 +1,7 @@
 <template>
     <div class="stars">
         <div v-for="index in 5">
-            <div :class="{'rated' : index < rating}">
+            <div :class="{'rated' : index <= rating}">
                 <span class="material-icons">grade</span>
             </div>
         </div>

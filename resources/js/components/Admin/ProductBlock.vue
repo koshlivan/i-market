@@ -1,12 +1,12 @@
 <template>
     <div class="product-block">
-        <edit-product @closeEdit="closeEdit" v-show="editShow" :product="oneProduct"></edit-product>
         <title-table @addNew="addNewProduct">Product Table</title-table>
         <table-head></table-head>
         <div class="table-body">
             <line-product v-for="(product, index) in products"
                           :key="product.id"
                           :product="product"
+                          @editorSave="editorSave($event, index)"
                           @showEdit="showEdit(product)"
                           @deleteOne="deleteOne(index)"></line-product>
         </div>
@@ -23,6 +23,7 @@ import TitleTable from "./TitleTable";
 import TableHead from "./TableHead";
 import LineProduct from "./LineProduct";
 import EditProduct from "./EditProduct";
+import productService from "../../productService";
 export default {
     name: "product-block",
     mixins: [
@@ -49,8 +50,10 @@ export default {
         closeModal() {
             this.showModalProduct = false;
         },
-        submitModal(event) {
-            this.products.push(event);
+        async submitModal(event) {
+            console.log('submit modal push to products'+JSON.stringify(event));
+            const newProduct = await productService.getOneProduct(event);
+            this.products.push(newProduct.data);
         },
         getAllProducts() {
             axios.get('/api/products')
@@ -59,13 +62,11 @@ export default {
         deleteOne(index) {
             this.products.splice(index, 1);
         },
-        showEdit(product){
-            this.oneProduct = product;
-            this.editShow = true;
-        },
-        closeEdit() {
-            this.editShow = false;
-            this.oneProduct = {};
+        async editorSave(event, index) {
+            console.log('editor save index: ', event);
+            const updated = await axios.get('api/products/'+event);
+            console.log('editor save receive updated: ', JSON.stringify(updated.data));
+            this.products.splice(index, 1, updated.data);
         }
     },
 

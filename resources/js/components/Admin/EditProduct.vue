@@ -1,18 +1,12 @@
 <template>
     <div class="edit-product">
         <button @click="closeWindow">Close</button>
-<!--        <label>Choose category</label>-->
-<!--        <select id="select_category" @change="categoryChoose()">-->
-<!--            <option v-for="(category, index) in categories"-->
-<!--                    :key="category.id"-->
-<!--                    :value="category.id"-->
-<!--            >{{category.id+' - '+category.name}}</option>-->
-<!--        </select>-->
         <div class="editor-holder">
             <div class="options">
-                <add-product-variation v-for="(variation, index) in variations"
-                                       :key="variation.id"></add-product-variation>
-                <button @click="addOption">+option</button>
+                <add-product-variation v-for="index in additionVariations"
+                                       :key="index" @optionChange="optionChange($event)"></add-product-variation>
+                <button @click="addOption"><i class="fas fa-plus-square"></i>add option</button>
+                <button @click="removeOption"><i class="fas fa-minus-square"></i>remove option</button>
             </div>
             <form class="inputs" @submit.prevent="submitModal">
                 <label>Name, Model</label>
@@ -48,6 +42,7 @@
 
 <script>
 import AddProductVariation from "./AddProductVariation";
+import productService from "../../productService";
 export default {
     name: "edit-product",
     components: {AddProductVariation},
@@ -55,31 +50,54 @@ export default {
       'product'
     ],
     emits: [
-        'closeEdit'
+        'closeEdit',
+        'editorSave'
     ],
     data() {
         return {
-            //categories: [],
-            //pickedCategory: 0,
             name: this.product.name,
             price: this.product.price,
             brand: this.product.brand,
             code: this.product.code,
             description: this.product.description,
-            modalImage: 'assets/none.png',
-            attachment : null,
-            variations: []
+            additionVariations: 0,
+            additionModes: []
         }
     },
     methods: {
-        submitModal() {
-
+        async submitModal() {
+            const product = {
+                id: this.product.id,
+                name: this.name,
+                price: this.price,
+                brand: this.brand,
+                code: this.code,
+                description: this.description,
+            }
+            const editedProduct = await productService.editProduct(product);
+            for (let mode of this.additionModes) {
+                await productService.createProductOption(product.id, mode.image, mode.differ);
+            }
+            this.$emit('editorSave', product.id);
+        },
+        optionChange(event) {
+            console.log('edit product option change received event', event);
+            this.additionModes.push(event);
+            console.log('edit product option change', JSON.stringify(this.additionModes));
         },
         closeWindow() {
             this.$emit('closeEdit');
         },
         addOption() {
-            this.variations.push({name: '', image: ''});
+            ++this.additionVariations;
+        },
+        removeOption() {
+            if (this.additionVariations > 0) {
+                --this.additionVariations;
+                if (this.additionModes.length > this.additionVariations) {
+                    this.additionModes.pop();
+                }
+            }
         }
     }
 }
@@ -87,13 +105,18 @@ export default {
 
 <style scoped>
 .edit-product {
+    background-color: rgba(66, 66, 66, 0.85);
     width: 100%;
-    margin: 1rem 0;
+    height: 100vh;
     padding: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
 }
 .form-self {
     min-width: 80%;
@@ -106,12 +129,16 @@ export default {
     align-items: stretch;
     margin-top: 4rem;
 }
-.form-self button {
-    width: 6rem;
+button {
+    width: 8rem;
+    height: 2rem;
     float: right;
     margin: 1rem;
-    background-color: darkred;
+    background-color: red;
     color: white;
+}
+i {
+    margin-right: 0.2rem;
 }
 .form-self input {
     margin: 0.2rem 1rem;

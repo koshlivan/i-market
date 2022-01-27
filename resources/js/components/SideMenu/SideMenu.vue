@@ -3,7 +3,8 @@
         <h3>top category</h3>
         <a v-for="(category, index) in categories"
            :key="index"
-           href="#" >{{category.name}}</a>
+           href="#" @click.prevent="$emit('categoryClicked', category.id)"
+            :title="category.name">{{category.name}}</a>
         <slot></slot>
         <a href="#">
             <img src="assets/SideMenu/side.jpg" alt="">
@@ -14,6 +15,9 @@
 <script>
 export default {
     name: "side-menu",
+    emits: [
+      'categoryClicked'
+    ],
     data(){
         return {
             categories: []

@@ -35,4 +35,11 @@ class Product extends Model
     {
         return $this->hasOne(Attachment::class);
     }
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($product) {
+            $product->options()->delete();
+        });
+    }
 }

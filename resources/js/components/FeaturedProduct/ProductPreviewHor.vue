@@ -1,10 +1,10 @@
 <template>
     <div class="product-horizont">
-        <img :src="image" alt="" @mouseover="imgHover" @mouseleave="imgBack">
+        <img :src="product.options[0].image" alt="" @mouseover="imgHover" @mouseleave="imgBack">
         <div class="desriptions">
-            <a class="descript" href="#">{{product.description}}</a>
-            <stars-rating :rating="product.stars"></stars-rating>
-            <p>{{product.price}}</p>
+            <a class="descript" href="#">{{product.name}}</a>
+            <stars-rating :rating="product.rating"></stars-rating>
+            <p>{{'$'+product.price}}</p>
         </div>
     </div>
 </template>
@@ -19,15 +19,17 @@ export default {
     ],
     data() {
       return {
-          image: this.product.image
+          image: this.product.options[0].image
       }
     },
     methods: {
         imgHover(){
-            this.image = this.product.image2;
+            if (this.product.options[1].image !== '') {
+                this.image = this.product.options[1].image;
+            }
         },
         imgBack(){
-            this.image = this.product.image;
+            this.image = this.product.options[0].image;
         }
     }
 }

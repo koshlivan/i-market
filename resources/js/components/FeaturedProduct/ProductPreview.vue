@@ -1,15 +1,16 @@
 <template>
     <div class="product-card">
         <img :src="image" alt="product" @mouseover="imgHover" @mouseleave="imgBack">
+        <h4>{{product.name}}</h4>
         <div class="stars">
-            <div v-for="(star, index) in stars">
-                <div :class="{'rated' : index < product.stars}">
+            <div v-for="index in 5">
+                <div :class="{'rated' : index <= product.rating}">
                 <span class="material-icons">grade</span>
                 </div>
             </div>
         </div>
         <p class="description">{{product.description}}</p>
-        <h3 class="price">{{product.price}}</h3>
+        <h3 class="price">{{'$'+product.price}}</h3>
         <div class="product-actions">
             <product-menu></product-menu>
         </div>
@@ -23,20 +24,21 @@ export default {
     name: "product-preview",
     components: {ProductMenu},
     props: [
-       'product'
+        'product'
     ],
     data(){
         return {
-             stars : 5,
-            image: this.product.image
+            image: this.product.options[0].image
         }
     },
     methods: {
         imgHover(){
-            this.image = this.product.image2;
+            if (this.product.options[1].image !== '') {
+                this.image = this.product.options[1].image;
+            }
         },
         imgBack(){
-            this.image = this.product.image;
+            this.image = this.product.options[0].image;
         }
     }
 }
@@ -45,6 +47,7 @@ export default {
 <style scoped>
 .product-card {
     max-width: 15rem;
+    margin: 0 0.5rem;
     position: relative;
     overflow-x: hidden;
 }
@@ -75,5 +78,13 @@ img {
 }
 .product-card:hover .product-actions{
     transform: translateX(100px);
+}
+.description {
+    height: 5rem;
+    overflow: auto;
+}
+h4 {
+    text-transform: uppercase;
+    text-align: center;
 }
 </style>

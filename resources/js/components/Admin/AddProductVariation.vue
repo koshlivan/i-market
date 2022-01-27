@@ -1,9 +1,10 @@
 <template>
-    <div class="add-product-variation">
+    <form class="add-product-variation" @submit.prevent="upload">
             <label>Image for variation:</label>
-            <input type="file" id="optionImage">
-            <input type="text" placeholder="Difference option" v-model="difference" @blur="$emit('optionChange', difference)">
-    </div>
+            <input type="file" id="optionImage" @change="onChange">
+            <input type="text" placeholder="Difference option" v-model="difference">
+            <input type="submit" value="SAVE MODE">
+    </form>
 </template>
 
 <script>
@@ -14,9 +15,39 @@ export default {
     ],
     data() {
         return {
-            difference: ''
+            difference: '',
+            image: null,
+            imagePath: ''
         }
     },
+    methods: {
+        onChange(e) {
+            this.image = e.target.files[0];
+        },
+        upload() {
+            if (this.image === null  &&  this.difference === '') return;
+            if (this.image !== null) {
+                console.log('in if, image is filled');
+                const formData = new FormData;
+                formData.set('image', this.image);
+                axios.post('api/attachments', formData)
+                    .then( response => {
+                        this.imagePath = 'storage/'+response.data;
+                        console.log('saving image path: '+this.imagePath);
+                        this.$emit('optionChange', {
+                            differ: this.difference,
+                            image: this.imagePath
+                        });
+                    });
+            } else {
+                console.log('in else, image is absent');
+                this.$emit('optionChange', {
+                    differ: this.difference,
+                    image: this.imagePath
+                })
+            }
+        }
+    }
 }
 </script>
 

@@ -3,7 +3,7 @@
         <div class="form-self">
             <button @click="closeWindow">Close</button>
             <label>Choose category</label>
-            <select id="select_category" @change="categoryChoose()">
+            <select ref="select_category" @change="categoryChoose()">
                 <option v-for="(category, index) in categories"
                         :key="category.id"
                         :value="category.id"
@@ -34,6 +34,7 @@
                             name="code"
                             v-model="code"
                             placeholder="Product Code">
+                    <leave-rating @rating="setRating($event)"></leave-rating>
                     <label>Description</label>
                     <textarea  name="description"
                                v-model="description"
@@ -49,9 +50,10 @@
 <script>
 import productService from "../../productService";
 import AddProductVariation from "./AddProductVariation";
+import LeaveRating from "../SingleProductPage/LeaveRating";
 export default {
     name: "modal-add",
-    components: {AddProductVariation},
+    components: {LeaveRating, AddProductVariation},
     emits: [
         'closeModal',
         'submitModal'
@@ -60,15 +62,15 @@ export default {
         return {
             categories: [],
             option: '',
-            pickedCategory: 0,
+            imagePath: '',
+            pickedCategory: 1,
             name: '',
+            rating: 0,
             price: 0,
             brand: '',
             code: '',
             description: '',
-            modalImage: 'assets/none.png',
             attachment : null,
-            product_id: 0
         }
     },
     created() {
@@ -76,38 +78,30 @@ export default {
             .then( response => {this.categories = response.data});
     },
     methods: {
-        submitModal() {
-            let product = {
+       async submitModal() {
+            console.log('start submit, chek option and image: '+this.imagePath, this.option);
+            const product = {
                 name: this.name,
                 price: this.price,
                 brand: this.brand,
                 code: this.code,
+                rating: this.rating,
                 description: this.description,
                 category_id: this.pickedCategory
             };
-            productService.createProduct(product)
-                .then(response => {
-                    console.log(response.data);
-                    this.product_id = response.data.id;
-                    let option = {
-                        name: this.option,
-                        image: this.modalImage,
-                        master: this.product_id
-                    }
-                    productService.createProductOption(option)
-                });
-
-            // .then( response => {
-                this.$emit('submitModal', product);
-            // })
-            this.clearFields();
-            this.closeWindow();
+            const newProduct = await productService.createProduct(product);
+           console.log('image and options before sending to service: ', newProduct.data.id, this.imagePath, this.option);
+           await productService.createProductOption(newProduct.data.id, this.imagePath, this.option);
+           this.$emit('submitModal', newProduct.data.id);
+           this.clearFields();
+           this.closeWindow();
         },
         closeWindow() {
             this.$emit('closeModal');
         },
         categoryChoose() {
-            this.pickedCategory = document.getElementById('select_category').value;
+            //this.pickedCategory = document.getElementById('select_category').value;
+            this.pickedCategory = this.$refs.select_category.value;
         },
         clearFields() {
             this.name = '';
@@ -115,25 +109,17 @@ export default {
             this.brand = '';
             this.code = '';
             this.description = '';
-            this.pickedCategory = 0;
-            this.category_id = 0;
-            this.options = [];
-        },
-        onAttachmentChange (e) {
-            this.attachment = e.target.files[0]
-        },
-        saveImage() {
-            const config = { 'content-type': 'multipart/form-data' }
-            const formData = new FormData();
-            formData.append('name', this.modalImage);
-            formData.append('attachment', this.attachment);
-
-            axios.put('api/attachments', formData, config)
-                .then(response => console.log(response.data.message))
-                .catch(error => console.log(error))
+            this.pickedCategory = 1;
+            this.option = '';
+            this.imagePath = '';
         },
         optionChange(event) {
-            this.option = event;
+            this.option = event.differ;
+            this.imagePath = event.image;
+            console.log('saved options values: '+this.option, this.imagePath);
+        },
+        setRating(event) {
+            this.rating = event;
         }
     }
 }

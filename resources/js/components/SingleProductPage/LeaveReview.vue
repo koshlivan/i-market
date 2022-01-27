@@ -10,12 +10,7 @@
             <textarea name="comment" placeholder="Leave your review" rows="5"></textarea>
             <p><mark>Note:</mark>HTML is not translated!</p>
         </div>
-        <div class="rating">
-            <h5>Rating</h5>
-            <p>Bad</p>
-            <input type="radio" name="rate" v-for="index in 5" :key="index" value="index">
-            <p>Good</p>
-        </div>
+        <leave-rating></leave-rating>
         <div class="button-send">
             <button>continue</button>
         </div>
@@ -23,8 +18,10 @@
 </template>
 
 <script>
+import LeaveRating from "./LeaveRating";
 export default {
-    name: "leave-review"
+    name: "leave-review",
+    components: {LeaveRating}
 }
 </script>
 
@@ -70,21 +67,6 @@ h4 {
 }
 mark {
     background-color: #6c022d;
-}
-.rating {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-}
-.rating h5 {
-    padding-top: 0.5rem;
-    margin-left: 0.5rem;
-    vertical-align: middle;
-}
-.rating p {
-    margin: 0 0.5rem;
-    vertical-align: middle;
 }
 .button-send button {
     width: 7rem;

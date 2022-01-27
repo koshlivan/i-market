@@ -14,7 +14,7 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li v-for="(field, index) in sortFields"
                             :key="index"
-                            @click="sortPicked(field)"> <p class="dropdown-item">{{ field }}</p></li>
+                            @click="sortPicked(field)"> <p class="dropdown-item">{{ field.display }}</p></li>
                     </ul>
                 </div>
             </div>
@@ -40,7 +40,8 @@ export default {
     name: "sorting-the",
     emits: [
         'sortPicked',
-        'showPicked'
+        'showPicked',
+        'viewModePlates'
     ],
     data() {
         return  {
@@ -48,14 +49,16 @@ export default {
             sortOption: 'default',
             showOption: 'default',
             showViews: [9, 20, 50, 100, 200],
-            sortFields: ['Name (A - Z)',
-                         'Name (Z - A)',
-                         'Price (Lower to Higher)',
-                         'Price (Higher to Lower)',
-                         'Rating (Lower to Higher)',
-                         'Rating (Higher to Lower)',
-                         'Newest to Older',
-                         'Oldest to Newer']
+            sortFields: [
+                            {display: 'Name (A - Z)', sort: 'name', order: 'asc'},
+                            {display: 'Name (Z - A)', sort: 'name', order: 'desc'},
+                            {display: 'Price (Lower to Higher)', sort: 'price', order: 'asc'},
+                            {display: 'Price (Higher to Lower)', sort: 'price', order: 'desc'},
+                            {display: 'Rating (Lower to Higher)', sort: 'rating', order: 'asc'},
+                            {display: 'Rating (Higher to Lower)', sort: 'rating', order: 'desc'},
+                            {display: 'Newest to Older', sort: 'created_at', order: 'asc'},
+                            {display: 'Oldest to Newer', sort: 'created_at', order: 'desc'},
+                        ]
         }
     },
     methods: {
@@ -67,13 +70,13 @@ export default {
             this.viewModePlates = true;
             this.$emit('viewModePlates', true);
         },
-        sortPicked(field) {
-            this.sortOption = field;
-            this.$emit('sortPick', field);
+        sortPicked(sort) {
+            this.sortOption = sort.display;
+            this.$emit('sortPicked', sort);
         },
         showPicked(show) {
             this.showOption = show;
-            this.$emit('showPick', show);
+            this.$emit('showPicked', show);
         }
     }
 }

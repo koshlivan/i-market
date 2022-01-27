@@ -1,5 +1,9 @@
 <template>
     <div class="line-product">
+        <edit-product @closeEdit="closeEdit"
+                      @editorSave="editorSave($event)"
+                      v-show="isEditShow"
+                      :product="product"></edit-product>
         <div class="self-row">
             <div class="table-cell">
                 <img :src="product.options[0].image" alt="Prod image">
@@ -33,38 +37,6 @@
                 <h5></h5>
             </div>
         </div>
-        <div class="self-row" v-show="isEditShow">
-            <div class="table-cell">
-                <img :src="product.image" alt="Prod image">
-            </div>
-            <div class="table-cell">
-                <input type="text" v-model="naming">
-            </div>
-            <div class="table-cell">
-                <stars-rating :rating="product.rating"></stars-rating>
-            </div>
-            <div class="table-cell">
-                <input type="number" v-model="pricing">
-            </div>
-            <div class="table-cell">
-                <input type="text" v-model="branding">
-            </div>
-            <div class="table-cell">
-                <input type="text" v-model="coding">
-            </div>
-            <div class="table-cell">
-                <input type="checkbox"><label>In stock</label>
-            </div>
-            <div class="table-cell">
-                <textarea type="text" v-model="descriptioning" rows="3"></textarea>
-            </div>
-            <div class="table-cell">
-
-            </div>
-            <div class="table-cell">
-                <h5>{{}}</h5>
-            </div>
-        </div>
         <div class="actions">
             <button @click="showEditWindow"><i class="fas fa-arrow-up"></i>edit<i class="fas fa-arrow-up"></i></button>
             <button @click="saveEdited" v-show="isEditShow"><i class="fas fa-arrow-up"></i>Save Changes</button>
@@ -77,15 +49,16 @@
 <script>
 import StarsRating from "../Rating/StarsRating";
 import productService from "../../productService";
+import EditProduct from "./EditProduct";
 export default {
     name: "line-product",
-    components: {StarsRating},
+    components: {StarsRating, EditProduct},
     props: [
         'product',
     ],
     emitted: [
         'deleteOne',
-        'showEdit'
+        'editorSave'
     ],
     data(){
         return {
@@ -160,21 +133,27 @@ export default {
             })
         },
         showEditWindow() {
-            this.$emit('showEdit');
-            //this.isEditShow = true;
+            //this.$emit('showEdit');
+            this.isEditShow = true;
         },
-        saveEdited() {
-            axios.put('api/users/' + this.product.id, {
+        async saveEdited() {
+           await axios.put('api/users/' + this.product.id, {
                 name: this.name,
                 price: this.price,
                 brand: this.brand,
                 code: this.code,
                 description: this.description,
-            })
-                .then(response => {
-                });
-
+            });
+            this.closeEdit();
+        },
+        closeEdit() {
             this.isEditShow = false;
+            this.oneProduct = {};
+        },
+        editorSave(event) {
+            this.$emit('editorSave', event);
+
+            this.closeEdit()
         }
     }
 }

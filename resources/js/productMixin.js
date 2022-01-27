@@ -3,12 +3,15 @@ import productService from "./productService";
 export default  {
     data () {
         return {
-            products : []
+            products : [],
+            paginate : {}
         }
     },
     created() {
        // productService.getAllProducts()
         axios.get('/api/products')
-            .then((response) => {this.products = response.data});
+            .then((response) => {
+                this.products = response.data;
+            });
     }
 }

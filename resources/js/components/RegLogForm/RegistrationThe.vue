@@ -1,18 +1,37 @@
 <template>
     <div class="register-part">
-        <input type="text" placeholder="Username">
-        <input type="email" placeholder="Email Address">
-        <input type="password" placeholder="Password">
-        <input type="password" placeholder="Confirm Password">
+        <h6 v-if="errors" class="error">{{errorMessage}}</h6>
+        <input type="text" placeholder="Username" v-model="userName">
+        <input type="email" placeholder="Email Address" v-model="email">
+        <input type="password" placeholder="Password" v-model="password">
+        <input type="password" placeholder="Confirm Password" v-model="passwordConfirm">
         <div class="center">
-            <button>register now</button>
+            <button @click="register">register now</button>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: "registration-the"
+    name: "registration-the",
+    data(){
+        return {
+            userName: '',
+            email: '',
+            password: '',
+            passwordConfirm: '',
+            errors: false,
+            errorMessage: ''
+        }
+    },
+    methods: {
+        register() {
+            if (this.password !== this.passwordConfirm) {
+                this.errors = true;
+                this.errorMessage = 'Passwords do not match'
+            }
+        }
+    }
 }
 </script>
 
@@ -49,5 +68,12 @@ button:active {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+}
+.error {
+    color: red;
+    font-weight: 500;
+    padding: 0.2rem 2rem;
+    border: solid 1px red;
+
 }
 </style>

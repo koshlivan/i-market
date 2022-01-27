@@ -30,6 +30,7 @@ Route::apiResources([
     'reviews' => ReviewController::class,
     'orders' => OrderController::class,
     'categories' => CategoryController::class,
-
 ]);
-Route::put('api/attachments', 'AttachmentController@store');
+Route::post('attachments', [AttachmentController::class, 'store']);
+
+

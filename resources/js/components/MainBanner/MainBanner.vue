@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+
         <div id="main_banner" class="carousel slide">
             <div class="indicator-holder">
                 <h1 v-for="(banner, index) in images"
@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-    </div>
+
 </template>
 
 <script>
@@ -30,7 +30,7 @@ export default {
             images : [
                 {src : 'assets/main_banner1.jpg', description: 'wow wow wow', lure: 'buy buy now', placeLeft: false},
                 {src : 'assets/main_banner2.jpg', description: 'blow your mind', lure: 'change your life', placeLeft: true},
-                {src : 'assets/main_banner3.jpeg', description: 'how did you live without it?', lure: 'your main buy', placeLeft: false}],
+                {src : 'assets/main_banner3.jpg', description: 'how did you live without it?', lure: 'your main buy', placeLeft: false}],
             imageSrc : this.imageNow,
             imageIndex : 0,
         }
@@ -70,7 +70,7 @@ export default {
 <style scoped>
     #main_banner {
         position: relative;
-        max-height: 50vh;
+        width: 100%;
     }
     .indicator-holder {
         display: flex;

@@ -25,12 +25,12 @@ export default {
 
 <style scoped>
     .holder {
-        max-width: 50%;
-        max-height: 100%;
+        width: 48%;
+        height: 100%;
         position: relative;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: space-between;
         align-items: stretch;
     }
     .news-date {
@@ -82,5 +82,8 @@ export default {
     }
     .news-footer a span{
         vertical-align: middle;
+    }
+    img {
+        width: 100%;
     }
 </style>

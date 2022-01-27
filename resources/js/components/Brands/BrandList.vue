@@ -1,11 +1,14 @@
 <template>
     <div class="brand-list">
-        <navigator>brand logo</navigator>
-        <div class="logos-container">
-            <div class="logo-holder"
-                 v-for="(logo, index) in logos"
-                 :key="index">
-                <img :src="logos[index]" alt="brand-logo">
+        <navigator @lineMove="switchRight($event)">brand logo</navigator>
+        <div class="swiper">
+            <div class="logos-container">
+                <div class="logo-holder"
+                     ref="plate"
+                     v-for="(logo, index) in logos"
+                     :key="index">
+                    <img :src="logos[index]" alt="brand-logo">
+                </div>
             </div>
         </div>
     </div>
@@ -29,6 +32,15 @@ export default {
                     'assets/BrandLogos/brand9.png',
             ]
         }
+    },
+    methods: {
+        switchRight(event) {
+            if (event) {
+                this.$refs.plate.style.transform = "translate(15%, 0)";
+            } else {
+                this.$refs.plate.style.transform = "translate(15%, 0)";
+            }
+        }
     }
 }
 </script>
@@ -37,19 +49,28 @@ export default {
 .brand-list {
     width: 100%;
 }
-.logos-container{
+.swiper{
     width: 100%;
+    overflow-x: hidden;
+    position: relative;
+}
+.logos-container{
+    /*width: 100%;*/
     max-height: 10rem;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: stretch;
     margin: 1.5rem 0;
-    overflow-x: auto;
-    scroll-snap-type: x;
-    scroll-behavior: smooth;
+    transition: 500ms;
+    /*overflow-x: auto;*/
+    /*scroll-snap-type: x;*/
+    /*scroll-behavior: smooth;*/
+    positon: relative;
+    /*transform: translate(-15% ,0);*/
 }
 .logo-holder {
+    margin: 0 1rem;
     max-height: 100%;
     opacity: 60%;
     scroll-snap-align: start;

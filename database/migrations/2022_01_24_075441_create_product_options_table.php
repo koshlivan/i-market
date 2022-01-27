@@ -15,7 +15,7 @@ class CreateProductOptionsTable extends Migration
     {
         Schema::create('product_options', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained();
+            $table->foreignId('product_id')->constrained()->on('products')->onDelete('cascade');
             $table->string('image')->nullable();
             $table->string('name')->nullable();
             $table->timestamps();

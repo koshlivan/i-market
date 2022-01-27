@@ -42,7 +42,7 @@ export default {
     .news-holder {
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: stretch;
         flex-wrap: nowrap;
         margin-top: 1rem;

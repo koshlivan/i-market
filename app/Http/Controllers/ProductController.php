@@ -4,18 +4,39 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use phpDocumentor\Reflection\Types\Integer;
+use Illuminate\Http\Response;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @param Request $request
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Product::with('options')->get();
+        $query = Product::query()->with('options');
+        if ( isset($request->per_page) ) {
+            return $query->paginate($request->per_page);
+        }
+        if ( isset($request->sort) && isset($request->order)) {
+            if ($request->order === 'asc') {
+                //return 'in sort order asc '.$request->sort;
+                return $query->get()->sortBy($request->sort);
+            }
+            if ($request->order === 'desc') {
+                //return 'in sort order desc '.$request->sort;
+                return $query->get()->sortByDesc($request->sort);
+            }
+            //return 'in if to sort without any orders';
+        }
+        if ( isset($request->category_id) ) {
+            return $query->where('category_id', $request->category_id)->get();
+        }
+
+        //return $query->get();
+        //return Product::with('options')->get();
     }
 
     /**
@@ -26,16 +47,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-       $new_product = Product::create($request->all());
-
-       return $new_product;
+        return Product::create($request->all());
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @param  int $id
+     * @return Response
      */
     public function show($id)
     {
