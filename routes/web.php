@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AttachmentController;
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\PageController;
+use \App\Http\Controllers\MainPageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +15,5 @@ use \App\Http\Controllers\PageController;
 |
 */
 
-Route::get('/{any}', [PageController::class, 'index'])->where('any', '.*');
+Route::get('/{any}', [MainPageController::class, 'index'])->where('any', '.*');
 
-//Route::post('attachments', [AttachmentController::class, 'store']);

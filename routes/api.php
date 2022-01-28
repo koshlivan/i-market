@@ -8,6 +8,7 @@ use \App\Http\Controllers\OrderController;
 use \App\Http\Controllers\ProductOptionController;
 use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\AttachmentController;
+use \App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,7 @@ use \App\Http\Controllers\AttachmentController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+//Route::get('products/{id}', function($id) {return \App\Models\Product::with('options')->find($id);});
 Route::apiResources([
     'products' => ProductController::class,
     'product-options' => ProductOptionController::class,
@@ -31,6 +32,10 @@ Route::apiResources([
     'orders' => OrderController::class,
     'categories' => CategoryController::class,
 ]);
+
 Route::post('attachments', [AttachmentController::class, 'store']);
+Route::post('users/register', [UserController::class, 'store']);
+Route::post('users/login', [UserController::class, 'login']);
+
 
 

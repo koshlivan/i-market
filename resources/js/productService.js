@@ -3,10 +3,8 @@ export default {
        return axios.get('/api/products');
     },
 
-    getPaginated(perPage) {
-      return axios.get('api/products', {params : {
-          per_page : perPage
-      }})
+    getPaginated(params) {
+      return axios.get('api/products', {params : params})
     },
 
     getSorted(sorting) {
@@ -15,6 +13,11 @@ export default {
                 sort : sorting.sort,
                 order : sorting.order,
             }})
+    },
+
+    getSingleProduct(id) {
+        console.log('in service, id is: ', id);
+      return axios.get('api/products/'+id);
     },
 
     getReviewsAmount(product_id) {

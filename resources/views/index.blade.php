@@ -38,7 +38,7 @@
             var map=new google.maps.Map(document.getElementById("google-map"),mapProp);
         }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcqZ9atwOGjWumFyFJ3WLwZ6K6MiNMxlI&callback=myMap"></script>
+{{--    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcqZ9atwOGjWumFyFJ3WLwZ6K6MiNMxlI&callback=myMap"></script>--}}
 
 
 </body>

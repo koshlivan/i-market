@@ -21,17 +21,24 @@ export default {
     ],
     data(){
         return{
+            weeked: []
         }
     },
-    computed: {
-        weeked() {
+    methods: {
+        getSomeProduct(id) {
+            return axios.get('api/products/'+id);
+        },
+        async setProposed() {
             let arr = [];
-            for (let i=0; i < 4; i++) {
-                arr.push(this.products[i+6]);
+            for (let i=1; i<5; i++) {
+                const singleProduct = await  this.getSomeProduct(i*2);
+                arr.push(singleProduct.data);
             }
-            console.log('array: ', JSON.stringify(arr));
-            return arr;
+            this.weeked = arr;
         }
+    },
+    created() {
+        this.setProposed();
     }
 }
 </script>

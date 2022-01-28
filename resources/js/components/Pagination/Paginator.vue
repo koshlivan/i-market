@@ -1,8 +1,16 @@
 <template>
     <div class="paginator">
-        <a href="#"><i class="fas fa-chevron-left"></i></a>
-        <a href="#" v-for="index in amount">{{index}}</a>
-        <a href="#"><i class="fas fa-chevron-right"></i></a>
+        <a href="#" @click.prevent="clickPrev"
+           :class="{inactive : currentPage === 1}">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="#" v-for="index in amount"
+           @click="$emit('pagePicked', index)"
+           :class="{active : index=== currentPage}">{{index}}</a>
+        <a href="#" @click.prevent="clickNext"
+           :class="{inactive : currentPage === amount}">
+            <i class="fas fa-chevron-right"></i>
+        </a>
     </div>
 
 </template>
@@ -11,8 +19,25 @@
 export default {
     name: "paginator-the",
     props: [
-        'amount'
+        'amount',
+        'currentPage'
     ],
+    emits: [
+        'pagePicked',
+        'next'
+    ],
+    methods: {
+        clickNext() {
+            if (this.currentPage < this.amount) {
+                this.$emit('next', true);
+            }
+        },
+        clickPrev() {
+            if (this.currentPage > 1) {
+                this.$emit('next', false);
+            }
+        }
+    }
 }
 </script>
 
@@ -48,6 +73,16 @@ export default {
     }
     .inactive{
         color: rgb(200, 200, 200);
+        cursor: default;
+    }
+    .active {
+        background-color: #fa4251;
+        color: white;
+        cursor: default;
+    }
+    .active:hover {
+        background-color: #fa4251;
+        color: white;
         cursor: default;
     }
 </style>

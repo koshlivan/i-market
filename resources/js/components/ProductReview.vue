@@ -3,14 +3,13 @@
         <div class="product-review">
             <div class="side-menu">
                 <side-menu></side-menu>
-                <propositions-hor></propositions-hor>
             </div>
             <div class="product-view-part">
-                <single-product-view :product="products[0]"></single-product-view>
+                <single-product-view :product="product"></single-product-view>
                 <navigator>related products</navigator>
                 <div class="product-container">
-                    <product-preview v-for="(product, index) in products"
-                                     :key="index"
+                    <product-preview v-for="(product, index) in related"
+                                     :key="product.id"
                                      :product="product"></product-preview>
                 </div>
                 <brand-list></brand-list>
@@ -27,44 +26,44 @@ import PropositionsHor from "./FeaturedProduct/PropositionsHor";
 import Navigator from "./Navigator";
 import ProductPreview from "./FeaturedProduct/ProductPreview";
 import BrandList from "./Brands/BrandList";
+import productMixin from "../productMixin";
+import productService from "../productService";
 export default {
     name: "product-review",
     components: {BrandList, ProductPreview, Navigator, PropositionsHor, SideMenu, SingleProductView},
+    mixins: [
+        productMixin
+    ],
     data() {
-        return {
-            products : [
-        {description : 'New IPS Screen'
-            , price : '$1M'
-            , images : ['assets/ProductPreview/product1-1.jpg',
-                        'assets/ProductPreview/product3-1.jpg',
-                        'assets/ProductPreview/product9-1.jpg']
-            , stars : 5
-            , reviews: ['Not bad', 'the worst quality', 'piece of s*', 'good enough', 'wow!']
+      return {
+
+      }
+    },
+    computed: {
+        related() {
+            let arr = [];
+            for (let i=0; i < 4; i++) {
+                arr.push(this.products[i*3]);
+            }
+            return arr;
         },
-        {description : 'New TFT Screen'
-            , price : '$70'
-            , images : ['assets/ProductPreview/product3-1.jpg',
-                        'assets/ProductPreview/product5-1.jpg']
-            , stars : 2,
-            reviews: ['Not bad', 'the worst quality', 'piece of s*', 'good enough', 'wow!']
-        },
-        {description : 'New CRT Screen'
-            , price : '$300k'
-            , images : ['assets/ProductPreview/product5-1.jpg',
-                       'assets/ProductPreview/product9-1.jpg']
-            , stars : 4,
-            reviews: ['Not bad', 'the worst quality', 'piece of s*', 'good enough', 'wow!']
-        },
-        {description : 'Old LCD Screen'
-            , price : '$500 000'
-            , images : ['assets/ProductPreview/product9-1.jpg',
-                        'assets/ProductPreview/product1-1.jpg']
-            , stars : 3,
-            reviews: ['Not bad', 'the worst quality', 'piece of s*', 'good enough', 'wow!']
+        product () {
+            return this.getProduct();
         }
-            ]
+    },
+    // watch: {
+    //   product() {
+    //       this.getProduct();
+    //   }
+    // },
+    methods: {
+        async getProduct() {
+            console.log('route params: ', this.$route.params.id);
+             const product = await productService.getSingleProduct(this.$route.params.id);
+            console.log('receive single product: ', JSON.stringify(product));
+             return  product.data;
         }
-    }
+    },
 }
 </script>
 

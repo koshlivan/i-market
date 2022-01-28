@@ -1,7 +1,14 @@
 <template>
     <div class="wrapper">
         <Header></Header>
-        <router-view></router-view>
+<!--        <div class="main-block" :class="{container : showSide}">-->
+<!--            <div class="side-menu">-->
+<!--                <side-menu v-show="showSide"></side-menu>-->
+<!--            </div>-->
+<!--            <div class="content">-->
+                <router-view></router-view>
+<!--            </div>-->
+<!--        </div>-->
         <my-footer></my-footer>
         <go-to-top @goToTop="topFunction"></go-to-top>
     </div>
@@ -14,9 +21,11 @@ import MyFooter from "./Footer/Footer";
 import AboutSkills from "./AboutComponents/Skills";
 import AboutDoings from "./AboutComponents/Doings";
 import GoToTop from "./GoToTopButton";
+import SideMenu from "./SideMenu/SideMenu";
     export default {
         name: 'App',
         components: {
+            SideMenu,
             GoToTop,
             AboutDoings,
             AboutSkills,
@@ -28,6 +37,12 @@ import GoToTop from "./GoToTopButton";
             topFunction() {
                 document.body.scrollTop = 0;
                 document.documentElement.scrollTop = 0;
+            }
+        },
+        computed: {
+            showSide() {
+                console.log('this route: ', JSON.stringify(this.$route));
+                return this.$route.name !== 'home';
             }
         }
     }
@@ -49,4 +64,17 @@ import GoToTop from "./GoToTopButton";
 collection-dropdown:hover .collection-dropdown-menu{
     display:flex;
 }
+.main-block{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.side-menu {
+    width: 28%;
+}
+.content {
+    width: 100%;
+}
+
 </style>

@@ -11,11 +11,12 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function index()
     {
-        return Category::with('products')->get();
+        //todo separate functionality. return only categories
+        return Category::with('products')->get()->toArray();
     }
 
     /**
@@ -26,6 +27,8 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        //todo validate request before saving
+        //todo show errors
         $new_category = Category::create($request->all());
 
         return $new_category;
@@ -51,6 +54,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        //todo add native laravel validation
         $category = Category::findOrFail($id);
         if($request->name!='') {
             $category->name = $request->name;
@@ -69,6 +73,7 @@ class CategoryController extends Controller
      */
     public function destroy(int $id)
     {
+        //show errors
         Category::find($id)->delete();
 
         return response(null, '204');

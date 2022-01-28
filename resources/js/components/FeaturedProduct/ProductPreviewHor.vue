@@ -2,7 +2,7 @@
     <div class="product-horizont">
         <img :src="product.options[0].image" alt="" @mouseover="imgHover" @mouseleave="imgBack">
         <div class="desriptions">
-            <a class="descript" href="#">{{product.name}}</a>
+            <a class="descript" href="#" @click="nameClicked(product.id)">{{product.name}}</a>
             <stars-rating :rating="product.rating"></stars-rating>
             <p>{{'$'+product.price}}</p>
         </div>
@@ -30,6 +30,9 @@ export default {
         },
         imgBack(){
             this.image = this.product.options[0].image;
+        },
+        nameClicked(id) {
+            this.$router.push({name: 'product/'+id});
         }
     }
 }

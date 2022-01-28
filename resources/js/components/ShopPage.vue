@@ -18,7 +18,10 @@
                                      :key="index"
                                      :product="product"></product-preview>
                 </div>
-                <paginator-the :amount="amount"></paginator-the>
+                <paginator-the :amount="totalPages"
+                               @pagePicked="pagePicked($event)"
+                               @next="goNext($event)"
+                               :current-page="currentPage"></paginator-the>
             </div>
         </div>
         <brand-list></brand-list>
@@ -34,6 +37,7 @@ import SortingThe from "./Sorting/SortingThe";
 import ProductPreview from "./FeaturedProduct/ProductPreview";
 import BrandList from "./Brands/BrandList";
 import productService from "../productService";
+
 export default {
     name: "shop-the",
     components: {
@@ -47,47 +51,58 @@ export default {
     },
     data() {
         return {
-            amount: 10,
-            perPage: 0,
-            sortMethod: '',
+            perPage: 9,
+            currentPage: 1,
+            totalPages: 1,
+            sortMethod: 'id',
             sortOrder: 'asc',
             loading: true,
-            products: []
+            products: [],
+            category_id : null
         }
     },
     methods: {
-      async getPaginated(perPage) {
-        this.loading = true;
-        const paginatedData = await productService.getPaginated(perPage);
-        this.products = paginatedData.data.data;
-        this.loading = false;
-      },
-      showPicked(event) {
-        this.perPage = event;
-        this.getPaginated(event);
-      },
-      async sortPicked(event) {
-        this.loading = true;
-        this.products = [];
-        this.sortMethod = event.sort;
-        this.sortOrder = event.order;
-        const sorted = await productService.getSorted(event);
-        this.products = sorted.data;
-        //console.log('sorted data: ', sorted.data[0]);
-        console.log('sorted data: ', JSON.stringify(sorted.data[0]));
-        // console.log('products: ', JSON.stringify(this.products));
-        this.loading = false;
-      },
-        async categoryClicked(event) {
+        async getPaginated() {
             this.loading = true;
-            this.products = [];
-            const category = await axios.get('api/products?category_id='+event);//, {props:{category_id : event}});
-            this.products = category.data;
-            console.log('show category: ', JSON.stringify(category.data));
+            const paginatedData = await productService.getPaginated({
+                    per_page: this.perPage,
+                    page: this.currentPage,
+                    sort: this.sortMethod,
+                    order: this.sortOrder,
+                    category_id: this.category_id
+                });
+            this.products = paginatedData.data.data;
             this.loading = false;
+            //this.currentPage = paginatedData.data.current_page;
+            this.totalPages = paginatedData.data.last_page;
+        },
+        showPicked(event) {
+            this.perPage = event;
+            this.getPaginated(event);
+        },
+        sortPicked(event) {
+            this.sortMethod = event.sort;
+            this.sortOrder = event.order;
+            this.getPaginated()
+        },
+        async categoryClicked(category_id) {
+            this.category_id = category_id;
+            this.getPaginated();
+        },
+        pagePicked(page) {
+            this.currentPage = page;
+            this.getPaginated();
+        },
+        goNext(event) {
+            if (event === true) {
+                this.pagePicked(++this.currentPage);
+            }
+            if (event === false) {
+                this.pagePicked(--this.currentPage);
+            }
         }
     },
-    mounted(){
+    mounted() {
         this.getPaginated(9)
     }
 }
@@ -101,12 +116,15 @@ export default {
     align-items: flex-start;
     margin-top: 1.5rem;
 }
+
 .side-menu {
     width: 28%;
 }
+
 .shop {
     width: 70%;
 }
+
 .view-container {
     display: flex;
     flex-direction: row;
@@ -114,6 +132,7 @@ export default {
     justify-content: space-between;
     align-content: stretch;
 }
+
 .loading {
     width: 3rem;
     height: 3rem;

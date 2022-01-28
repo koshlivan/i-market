@@ -2,36 +2,32 @@
     <div class="single-product-view">
         <div class="main-look">
             <div class="main-image">
-                <img :src="product.images[0]" alt="this place for image">
+                <img :src="product.options[0].image" alt="this place for image">
                 <div class="product-images">
-                    <img v-for="(image, index) in product.images"
-                         :key="index"
+                    <img v-for="(image, index) in product.options.image"
+                         :key="image.id"
                          alt="little image"
                          class="image-preview">
                 </div>
             </div>
             <div class="descriptions">
                 <div class="desc-bait">
-                    <h5>New LCDScreen and HD Video Recording</h5>
-                    <stars-rating rating="4"></stars-rating>
-                    <h4>$70</h4>
+                    <h5>{{ product.name }}</h5>
+                    <stars-rating :rating="product.rating"></stars-rating>
+                    <h4>{{ '$'+product.price }}</h4>
                 </div>
                 <div class="desc-info">
                     <h6>Brand:
-                        <span>Apple</span>
+                        <span>{{ product.brand }}</span>
                     </h6>
                     <h6>Product code:
-                        <span>product 20</span>
+                        <span>{{ product.code }}</span>
                     </h6>
                     <h6>Availability:
-                        <span>In Stock</span>
+                        <span>{{ inStock }}</span>
                     </h6>
                 </div>
-                <p>More room to move. With 80GB or 160GB of storage and up to
-                    40 hours of battery life, the new iPod classic lets you
-                    enjoy up to 40,000 songs or up to 200 hours of video or
-                    any combination wherever you go. Cover Flow. Browse
-                    through your music collection by flipping..</p>
+                <p>{{product.description}}</p>
                 <div class="take-params">
                     <div class="sort-by picker">
                         <label>Sort By</label>
@@ -53,9 +49,9 @@
                                 {{ colorOption }}
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li v-for="(color, index) in colors"
-                                    :key="index"
-                                    @click="colorPicked(color)"> <p class="dropdown-item">{{ color }}</p></li>
+                                <li v-for="(color, index) in product.options.name"
+                                    :key="color.id"
+                                    @click="colorPicked(color, color.id)"> <p class="dropdown-item">{{ color }}</p></li>
                             </ul>
                         </div>
                     </div>
@@ -93,12 +89,22 @@ export default {
             buyAmount: 0
         }
     },
+    computed: {
+      inStock () {
+          if (this.product.in_stock > 0 ) {
+              return 'In Stock';
+          } else {
+              return 'Coming soon';
+          }
+      }
+    },
     methods: {
         sortPicked(field) {
             this.sortOption = field;
         },
-        colorPicked(color) {
+        colorPicked(color, id) {
             this.colorOption = color;
+            this.image = this.product.options[id].image;
         }
     }
 }

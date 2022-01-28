@@ -3,7 +3,7 @@
         <navigator>top products</navigator>
         <div class="propositions">
             <product-horizont v-for="(product, index) in proposed"
-                              :key="index"
+                              :key="product.id"
                               :product="product"></product-horizont>
         </div>
     </div>
@@ -12,21 +12,29 @@
 <script>
 import Navigator from "../Navigator";
 import ProductHorizont from "./ProductPreviewHor";
-import productMixin from "../../productMixin";
 export default {
     name: "propositions-hor",
     components: {ProductHorizont, Navigator},
-    mixins: [
-        productMixin
-    ],
-    computed: {
-        proposed() {
+    data() {
+        return {
+            proposed: []
+        }
+    },
+    methods: {
+        getSomeProduct(id) {
+            return axios.get('api/products/'+id);
+        },
+        async setProposed() {
             let arr = [];
             for (let i=0; i<4; i++) {
-                arr.push(this.products[i*2+3]);
+                const singleProduct = await  this.getSomeProduct(i*2+3);
+                arr.push(singleProduct.data);
             }
-            return arr;
+            this.proposed = arr;
         }
+    },
+    created() {
+        this.setProposed();
     }
 }
 </script>

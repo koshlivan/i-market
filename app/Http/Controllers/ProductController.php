@@ -17,32 +17,19 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $query = Product::query()->with('options');
-        if ( isset($request->per_page) ) {
-            return $query->paginate($request->per_page);
+        if (isset($request->sort) && isset($request->order)) {
+            $query->orderBy($request->sort, $request->order);
         }
-        if ( isset($request->sort) && isset($request->order)) {
-            if ($request->order === 'asc') {
-                //return 'in sort order asc '.$request->sort;
-                return $query->get()->sortBy($request->sort);
-            }
-            if ($request->order === 'desc') {
-                //return 'in sort order desc '.$request->sort;
-                return $query->get()->sortByDesc($request->sort);
-            }
-            //return 'in if to sort without any orders';
+        if (isset($request->category_id)) {
+            $query->where('category_id', $request->category_id)->get();
         }
-        if ( isset($request->category_id) ) {
-            return $query->where('category_id', $request->category_id)->get();
-        }
-
-        //return $query->get();
-        //return Product::with('options')->get();
+        return $query->paginate($request->per_page, ['*'], 'page', $request->page);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return Product
      */
     public function store(Request $request)
@@ -53,37 +40,38 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param Request $request
      * @return Response
      */
-    public function show($id)
+    public function show($request)
     {
-        return Product::with('options')->findOrFail($id);
+        //return $request;
+        return Product::with('options')->find($request);
     }
 
     /**
      * Update the specified resource in storage.
-     * @param  int  $id
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
+     * @param int $id
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-        if($request->name!='') {
+        if ($request->name != '') {
             $product->name = $request->name;
         }
-        if($request->price!='') {
+        if ($request->price != '') {
             $product->price = $request->price;
         }
-        if($request->brand!='') {
+        if ($request->brand != '') {
             $product->brand = $request->brand;
         }
-        if($request->code!='') {
+        if ($request->code != '') {
             $product->code = $request->code;
         }
-        if($request->description!='') {
+        if ($request->description != '') {
             $product->description = $request->description;
         }
 

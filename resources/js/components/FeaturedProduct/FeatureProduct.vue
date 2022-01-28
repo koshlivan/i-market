@@ -27,15 +27,26 @@ export default {
     mixins: [
         productMixin
     ],
-    computed: {
-        featured() {
+    data() {
+      return {
+          featured : []
+      }
+    },
+    methods: {
+        getSomeProduct(id) {
+            return axios.get('api/products/'+id);
+        },
+        async setProposed() {
             let arr = [];
-            for (let i=0; i < 4; i++) {
-                arr.push(this.products[i+1]);
+            for (let i=1; i<5; i++) {
+                const singleProduct = await  this.getSomeProduct(i*3);
+                arr.push(singleProduct.data);
             }
-            console.log('array: ', JSON.stringify(arr));
-            return arr;
+            this.featured = arr;
         }
+    },
+    created() {
+        this.setProposed();
     }
 }
 </script>

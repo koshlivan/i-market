@@ -26,6 +26,7 @@ a {
     color: white;
     font-size: 1.2rem;
     margin: 0.5rem 0;
+    text-shadow: 0 0 5px black, 0 0 2px #fa4251;
 }
 a:hover {
     cursor: pointer;

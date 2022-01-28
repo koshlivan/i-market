@@ -3,7 +3,7 @@
         <h3>top category</h3>
         <a v-for="(category, index) in categories"
            :key="index"
-           href="#" @click.prevent="$emit('categoryClicked', category.id)"
+           href="#" @click.prevent="chooseCategory(category.id)"
             :title="category.name">{{category.name}}</a>
         <slot></slot>
         <a href="#">
@@ -28,6 +28,14 @@ export default {
             .then(response => {
                 this.categories = response.data;
             })
+    },
+    methods: {
+        chooseCategory(id) {
+            if (this.$route.name !== 'shop') {
+                this.$router.push({name: 'shop'});
+            }
+            this.$emit('categoryClicked', id);
+        }
     }
 
 }

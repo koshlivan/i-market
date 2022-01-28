@@ -1,3 +1,5 @@
+import ProductPage from "./components/ProductPage";
+
 require('./bootstrap');
 
 window.Vue = require('vue').default;
@@ -23,11 +25,11 @@ Vue.use(VueRouter);
 import Home from './components/Home';
 import About from './components/About';
 import ContactUs from './components/ContactUs';
-import ShopThe from "./components/ShopThe";
+import ShopPage from "./components/ShopPage";
 import RegistrationLogin from "./components/RegistrationLogin";
-import ProductReview from "./components/ProductReview";
 import Cart from "./components/Cart";
 import Admin from "./components/Admin";
+import ProductReview from "./components/ProductReview";
 
 
 const router = new VueRouter( {
@@ -51,7 +53,7 @@ const router = new VueRouter( {
         {
             path: '/shop',
             name: 'shop',
-            component: ShopThe
+            component: ShopPage
         },
         {
             path: '/login',
@@ -59,7 +61,7 @@ const router = new VueRouter( {
             component: RegistrationLogin
         },
         {
-            path: '/product/1',
+            path: '/product/:id',
             name: 'product',
             component: ProductReview
         },

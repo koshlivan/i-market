@@ -1,10 +1,10 @@
 <template>
     <div class="register-part">
         <h6 v-if="errors" class="error">{{errorMessage}}</h6>
-        <input type="text" placeholder="Username" v-model="userName">
-        <input type="email" placeholder="Email Address" v-model="email">
-        <input type="password" placeholder="Password" v-model="password">
-        <input type="password" placeholder="Confirm Password" v-model="passwordConfirm">
+        <input type="text" placeholder="Username" v-model="userName" required>
+        <input type="email" placeholder="Email Address" v-model="email" required>
+        <input type="password" placeholder="Password" v-model="password" required>
+        <input type="password" placeholder="Confirm Password" v-model="passwordConfirm" required>
         <div class="center">
             <button @click="register">register now</button>
         </div>
@@ -25,10 +25,18 @@ export default {
         }
     },
     methods: {
-        register() {
+        async register() {
             if (this.password !== this.passwordConfirm) {
                 this.errors = true;
                 this.errorMessage = 'Passwords do not match'
+            } else {
+                const user = await axios.post('api/users/register', {
+                    name: this.userName,
+                    email: this.email,
+                    password: this.password
+                });
+
+                this.$router.push({name: 'shop'});
             }
         }
     }
