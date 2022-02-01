@@ -1,21 +1,52 @@
 <template>
     <div class="login-part">
-        <input type="text" placeholder="Username">
-        <input type="password" placeholder="Password">
+        <input type="text" placeholder="Username" v-model.trim="name">
+        <input type="password" placeholder="Password" v-model.trim="password">
         <div class="memory">
-            <input type="checkbox" name="memory">
+            <input type="checkbox" name="memory" v-model.trim="remember">
             <label>Remember Me</label>
         </div>
         <div class="center">
-            <button>LOG IN</button>
+            <button @click.prevent="submit">LOG IN</button>
             <a href="#">forgot password?</a>
         </div>
     </div>
 </template>
 
 <script>
+import {eventBus} from "../../app";
+
 export default {
-    name: "login-the"
+    name: "login-the",
+    props: [
+        'user'
+    ],
+    data() {
+        return {
+
+                name: '',
+                password: '',
+                remember: false
+        }
+    },
+    methods: {
+        submit() {
+            axios.get('/sanctum/csrf-cookie')
+                .then( response => {
+                    axios.post('/api/users/login', {
+                        name: this.name,
+                        password: this.password,
+                        remember: this.remember
+                    })
+                    .then( () => {
+                            alert('login successfull');
+                            eventBus.$emit('loggedIn');
+                            this.$router.push('shop');
+                        });
+            })
+            .catch(errors => {console.log(errors)});
+        }
+    }
 }
 </script>
 

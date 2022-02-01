@@ -1,7 +1,7 @@
 <template>
     <div class="product-card">
         <div class="image">
-            <img :src="image" alt="product" @mouseover="imgHover" @mouseleave="imgBack">
+            <img :src="'/'+image" alt="product" @mouseover="imgHover" @mouseleave="imgBack">
         </div>
         <div class="product-info">
             <router-link tag="h4" class="clicker" :to="linkTo">{{product.name}}</router-link>

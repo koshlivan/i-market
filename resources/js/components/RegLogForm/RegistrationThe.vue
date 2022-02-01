@@ -1,10 +1,12 @@
 <template>
     <div class="register-part">
-        <h6 v-if="errors" class="error">{{errorMessage}}</h6>
-        <input type="text" placeholder="Username" v-model="userName" required>
-        <input type="email" placeholder="Email Address" v-model="email" required>
-        <input type="password" placeholder="Password" v-model="password" required>
-        <input type="password" placeholder="Confirm Password" v-model="passwordConfirm" required>
+        <h6 v-if="errors" class="error">
+            <span v-for="(error, index) in errorMessages" :key="index">{{error}}</span>
+        </h6>
+        <input type="text" placeholder="Username" v-model.trim="name" required>
+        <input type="email" placeholder="Email Address" v-model.trim="email" required>
+        <input type="password" placeholder="Password" v-model.trim="password" required>
+        <input type="password" placeholder="Confirm Password" v-model.trim="passwordConfirm" required>
         <div class="center">
             <button @click="register">register now</button>
         </div>
@@ -14,14 +16,17 @@
 <script>
 export default {
     name: "registration-the",
+    emits: [
+        'registration'
+    ],
     data(){
         return {
-            userName: '',
+            name: '',
             email: '',
             password: '',
             passwordConfirm: '',
             errors: false,
-            errorMessage: ''
+            errorMessages: []
         }
     },
     methods: {
@@ -30,13 +35,20 @@ export default {
                 this.errors = true;
                 this.errorMessage = 'Passwords do not match'
             } else {
-                const user = await axios.post('api/users/register', {
-                    name: this.userName,
+                axios.post('/api/users/register', {
+                    name: this.name,
                     email: this.email,
                     password: this.password
+                })
+                .then( () => {
+                    this.$emit('registration');
+                })
+                .catch( (error) => {
+                    this.errorMessages = error.response.data.errors;
                 });
 
-                this.$router.push({name: 'shop'});
+
+                //this.$router.push({name: 'shop'});
             }
         }
     }

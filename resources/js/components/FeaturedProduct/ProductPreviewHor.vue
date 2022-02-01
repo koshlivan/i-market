@@ -1,6 +1,6 @@
 <template>
     <div class="product-horizont">
-        <img :src="product.options[0].image" alt="" @mouseover="imgHover" @mouseleave="imgBack">
+        <img :src="'/'+product.options[0].image" alt="" @mouseover="imgHover" @mouseleave="imgBack">
         <div class="desriptions">
             <a class="descript" href="#" @click="nameClicked(product.id)">{{product.name}}</a>
             <stars-rating :rating="product.rating"></stars-rating>

@@ -10,7 +10,12 @@
                 <div class="col-xs-12 col-sm-8">
                     <ul class="header-top-right text-right">
                         <li><router-link tag="a" class="link-to" to="/admin">Admin management</router-link></li>
-                        <li class="account"><router-link tag="a" class="link-to" to="/login">Account</router-link></li>
+                        <li class="account" v-show="!isLogged">
+                            <router-link tag="a" class="link-to" to="/login">Account</router-link>
+                        </li>
+                        <li class="account" v-show="isLogged">
+                            <a href="#" @click.prevent="logout">Logout</a>
+                        </li>
                         <li class="language dropdown align"> <span
                             class="dropdown-toggle"
                             id="dropdownMenu1"
@@ -46,8 +51,28 @@
 </template>
 
 <script>
+import {eventBus} from "../../app";
+
 export default {
-    name: "Header-Top"
+    name: "Header-Top",
+    data() {
+        return {
+            isLogged: false
+        }
+    },
+    methods: {
+        logout() {
+            axios.post('/api/users/logout')
+            .then( () => {
+                this.isLogged = false;
+            });
+        }
+    },
+    created() {
+        eventBus.$on('loggedIn', () => {
+            this.isLogged = true;
+        })
+    }
 }
 </script>
 

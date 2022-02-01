@@ -52,19 +52,19 @@ export default {
         },
         async submitModal(event) {
             console.log('submit modal push to products'+JSON.stringify(event));
-            const newProduct = await productService.getOneProduct(event);
+            const newProduct = await productService.getSingleProduct(event);
             this.products.push(newProduct.data);
         },
         getAllProducts() {
-            axios.get('/api/products')
-                .then((response) => {this.products = response.data});
+            axios.get('/api/products?per_page='+10)
+                .then((response) => {this.products = response.data.data});
         },
         deleteOne(index) {
             this.products.splice(index, 1);
         },
         async editorSave(event, index) {
             console.log('editor save index: ', event);
-            const updated = await axios.get('api/products/'+event);
+            const updated = await axios.get('/api/products/'+event);
             console.log('editor save receive updated: ', JSON.stringify(updated.data));
             this.products.splice(index, 1, updated.data);
         }

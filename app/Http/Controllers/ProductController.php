@@ -41,12 +41,15 @@ class ProductController extends Controller
      * Display the specified resource.
      *
      * @param Request $request
+     * @param int $id
      * @return Response
      */
-    public function show($request)
+    public function show(Request $request, int $id)
     {
-        //return $request;
-        return Product::with('options')->find($request);
+        if ( isset($request->reviews) ) {
+            return Product::with('options')->with('reviews')->find($id);
+        }
+        return Product::with('options')->find($id);
     }
 
     /**

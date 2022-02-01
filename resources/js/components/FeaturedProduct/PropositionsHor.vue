@@ -22,7 +22,7 @@ export default {
     },
     methods: {
         getSomeProduct(id) {
-            return axios.get('api/products/'+id);
+            return axios.get('/api/products/'+id);
         },
         async setProposed() {
             let arr = [];

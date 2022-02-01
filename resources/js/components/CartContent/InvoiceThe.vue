@@ -42,7 +42,7 @@ export default {
     name: "invoice-the",
     props: [
         'orderTotal'
-    ]
+    ],
 }
 </script>
 

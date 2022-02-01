@@ -7,7 +7,7 @@
             :title="category.name">{{category.name}}</a>
         <slot></slot>
         <a href="#">
-            <img src="assets/SideMenu/side.jpg" alt="">
+            <img src="/assets/SideMenu/side.jpg" alt="">
         </a>
     </div>
 </template>
@@ -24,7 +24,7 @@ export default {
         }
     },
     created() {
-        axios.get('api/categories')
+        axios.get('/api/categories')
             .then(response => {
                 this.categories = response.data;
             })

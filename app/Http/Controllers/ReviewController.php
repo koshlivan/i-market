@@ -9,12 +9,12 @@ class ReviewController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        return Review::query()->where('product_id' === $request->product_id);
+        return Review::query()->where('product_id', $request->product_id)->get();
     }
 
     /**
@@ -25,7 +25,14 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $review = new Review();
+        $review->product_id = $request->product_id;
+        $review->reviewer = $request->reviewer;
+        $review->review = $request->review;
+        $review->rating = $request->rating;
+
+        $review->save();
+        return $review;
     }
 
     /**

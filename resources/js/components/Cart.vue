@@ -20,7 +20,15 @@ import BrandList from "./Brands/BrandList";
 import OrderList from "./CartContent/OrderList";
 export default {
     name: "cart-the",
-    components: {OrderList, BrandList, PropositionsHor, SideMenu}
+    components: {OrderList, BrandList, PropositionsHor, SideMenu},
+    data() {
+        return {
+            positions: []
+        }
+    },
+    methods: {
+
+    }
 }
 </script>
 

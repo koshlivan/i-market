@@ -5,14 +5,14 @@
                 <side-menu></side-menu>
             </div>
             <div class="product-view-part">
-                <single-product-view :product="product"></single-product-view>
+                <single-product-view :productId="$route.params.id"></single-product-view>
                 <navigator>related products</navigator>
                 <div class="product-container">
                     <product-preview v-for="(product, index) in related"
                                      :key="product.id"
                                      :product="product"></product-preview>
                 </div>
-                <brand-list></brand-list>
+<!--                <brand-list></brand-list>-->
             </div>
         </div>
 
@@ -36,34 +36,42 @@ export default {
     ],
     data() {
       return {
-
+          related: []
       }
     },
     computed: {
         related() {
             let arr = [];
-            for (let i=0; i < 4; i++) {
-                arr.push(this.products[i*3]);
+            for (let i=1; i <= 4; i++) {
+                arr.push(this.getSomeProduct(i*5));
             }
+
             return arr;
         },
-        product () {
-            return this.getProduct();
+        product() {
+            this.getProduct();
         }
     },
-    // watch: {
-    //   product() {
-    //       this.getProduct();
-    //   }
-    // },
     methods: {
         async getProduct() {
-            console.log('route params: ', this.$route.params.id);
              const product = await productService.getSingleProduct(this.$route.params.id);
-            console.log('receive single product: ', JSON.stringify(product));
              return  product.data;
+        },
+        getSomeProduct(id) {
+            return axios.get('/api/products/'+id);
+        },
+        async setProposed() {
+            let arr = [];
+            for (let i=1; i<=4; i++) {
+                const singleProduct = await  this.getSomeProduct(i*2);
+                arr.push(singleProduct.data);
+            }
+            this.related = arr;
         }
     },
+    created() {
+        this.setProposed();
+    }
 }
 </script>
 
@@ -78,6 +86,7 @@ export default {
     width: 28%;
 }
 .product-view-part {
+    width: 70%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

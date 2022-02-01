@@ -31,6 +31,10 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    public function carts()
+    {
+        return $this->belongsToMany(Cart::class);
+    }
     public function  attachment()
     {
         return $this->hasOne(Attachment::class);

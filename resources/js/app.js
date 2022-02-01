@@ -1,4 +1,4 @@
-import ProductPage from "./components/ProductPage";
+
 
 require('./bootstrap');
 
@@ -63,7 +63,8 @@ const router = new VueRouter( {
         {
             path: '/product/:id',
             name: 'product',
-            component: ProductReview
+            component: ProductReview,
+            props: true
         },
         {
             path: '/cart',
@@ -77,6 +78,7 @@ const router = new VueRouter( {
         }
     ]
 })
+export const eventBus = new Vue();
 
 const app = new Vue({
     el: '#app',

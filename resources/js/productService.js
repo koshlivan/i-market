@@ -17,7 +17,11 @@ export default {
 
     getSingleProduct(id) {
         console.log('in service, id is: ', id);
-      return axios.get('api/products/'+id);
+      return axios.get('/api/products/'+id);
+    },
+
+    getProductOptions(id) {
+      return axios.get('/api/product-options', {product: id});
     },
 
     getReviewsAmount(product_id) {
@@ -51,7 +55,5 @@ export default {
           description: product.description
       })
     },
-    getOneProduct(id) {
-        return axios.get('api/products/'+id);
-    }
+
 }

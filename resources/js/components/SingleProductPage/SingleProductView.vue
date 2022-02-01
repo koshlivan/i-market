@@ -1,11 +1,17 @@
 <template>
     <div class="single-product-view">
+        <images-slider v-show="imagesPreview"
+                       :options="options"
+                       :imageIndex="imageIndex"
+                       @closePreview="closePreview"></images-slider>
         <div class="main-look">
             <div class="main-image">
-                <img :src="product.options[0].image" alt="this place for image">
+                <img :src="'/'+options[0].image" alt="this place for image">
                 <div class="product-images">
-                    <img v-for="(image, index) in product.options.image"
+                    <img v-for="(image, index) in options"
+                         :src="'/'+image.image"
                          :key="image.id"
+                         @click="imageClicked(index)"
                          alt="little image"
                          class="image-preview">
                 </div>
@@ -49,19 +55,19 @@
                                 {{ colorOption }}
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li v-for="(color, index) in product.options.name"
+                                <li v-for="(color, index) in options"
                                     :key="color.id"
-                                    @click="colorPicked(color, color.id)"> <p class="dropdown-item">{{ color }}</p></li>
+                                    @click="colorPicked(color, color.id)"> <p class="dropdown-item">{{ color.name }}</p></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div class="quantity-param">
                     <label>Quantity:</label>
-                    <input type="number" v-model="buyAmount" min="0">
+                    <input type="number" v-model="buyAmount" min="1">
                 </div>
                 <div class="icons-actions">
-                    <h5><i class="fas fa-shopping-cart"></i></h5>
+                    <h5 @click="addToCart"><i class="fas fa-shopping-cart"></i></h5>
                     <h5><i class="fas fa-heart"></i></h5>
                     <h5><i class="fas fa-tasks"></i></h5>
                 </div>
@@ -74,19 +80,25 @@
 <script>
 import StarsRating from "../Rating/StarsRating";
 import ReviewsThe from "./ReviewsThe";
+import productService from "../../productService";
+import ImagesSlider from "./ImagesSlider";
 export default {
     name: "single-product-view",
-    components: {ReviewsThe, StarsRating},
+    components: {ImagesSlider, ReviewsThe, StarsRating},
     props: [
-      'product'
+        'productId'
     ],
     data(){
         return {
+            product: {},
+            options: [],
             sortOption: 'default',
             colorOption: 'default',
             sortFields: ['small', 'medium', 'as your ex has'],
             colors: ['red', 'orange', 'green', 'blue', 'gold', 'black'],
-            buyAmount: 0
+            buyAmount: 1,
+            imagesPreview: false,
+            imageIndex: 0
         }
     },
     computed: {
@@ -98,13 +110,43 @@ export default {
           }
       }
     },
+    created(){
+      this.getProduct();
+    },
     methods: {
+        getProduct() {
+            axios.get('/api/products/'+this.productId)
+            .then( (response) => {
+                this.options = response.data.options;
+                this.product = response.data;
+            })
+            .catch(err => console.error(err));
+        },
         sortPicked(field) {
             this.sortOption = field;
         },
         colorPicked(color, id) {
             this.colorOption = color;
             this.image = this.product.options[id].image;
+        },
+        addToCart() {
+            axios.post('/api/carts?product_id='
+                + this.productId+'&amount='
+                + this.buyAmount
+            )
+            .then(response => {
+                let name = response.data.product.name;
+                alert(name+' was added to the cart');
+            })
+            .catch(errors => console.log(errors));
+        },
+        imageClicked(index) {
+            this.imageIndex = index;
+            this.imagesPreview = true;
+        },
+        closePreview() {
+            this.imageIndex = 0;
+            this.imagesPreview = false;
         }
     }
 }
@@ -113,6 +155,7 @@ export default {
 <style scoped>
 .single-product-view {
     width: 100%;
+    margin-top: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -125,26 +168,40 @@ export default {
     align-items: stretch;
 }
 main-image{
-    width: 40%;
-    border: solid 2px white;
-    margin-left: 0.5rem;
+    width: 35%;
+    padding: 1rem;
+    margin: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
 }
+.main-image img {
+    max-width: 100%;
+    border: solid 2px white;
+}
 .product-images {
+    margin: 0.5rem;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: stretch;
+    overflow-x: auto;
+}
+.product-images img{
+    margin: 0.5rem;
 }
 .desc-bait, .desc-info{
     border-bottom: solid 1px rgb(66, 66, 66);
     margin-top: 1.5rem;
     padding-bottom: 1rem;
 }
+.desc-info span {
+    text-transform: capitalize;
+}
 .descriptions {
+    width: 100%;
+    margin: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

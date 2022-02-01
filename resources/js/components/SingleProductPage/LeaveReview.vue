@@ -3,16 +3,16 @@
         <h4>Write a review</h4>
         <div class="name">
             <label>Your Name</label>
-            <input type="text" placeholder="From Who">
+            <input type="text" placeholder="From Who" v-model="reviewer">
         </div>
         <div class="review-self">
             <label>Your Review</label>
-            <textarea name="comment" placeholder="Leave your review" rows="5"></textarea>
+            <textarea name="comment" placeholder="Leave your review" rows="5" v-model="review"></textarea>
             <p><mark>Note:</mark>HTML is not translated!</p>
         </div>
-        <leave-rating></leave-rating>
+        <leave-rating @rating="leaveRate($event)"></leave-rating>
         <div class="button-send">
-            <button>continue</button>
+            <button @click="sendReview">continue</button>
         </div>
     </div>
 </template>
@@ -21,7 +21,33 @@
 import LeaveRating from "./LeaveRating";
 export default {
     name: "leave-review",
-    components: {LeaveRating}
+    components: {LeaveRating},
+    props: [
+      'product_id'
+    ],
+    data() {
+        return {
+            rating: 1,
+            reviewer: '',
+            review: ''
+        }
+    },
+    methods: {
+        leaveRate(rating) {
+            this.rating = rating;
+        },
+        sendReview() {
+            axios.post('/api/reviews', {
+                rating: this.rating,
+                reviewer: this.reviewer,
+                review: this.review,
+                product_id: this.product_id
+            })
+            .then(response => {
+                alert('thanks for your '+response.data.review);
+            });
+        }
+    }
 }
 </script>
 

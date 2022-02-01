@@ -26,12 +26,12 @@ export default {
     },
     methods: {
         getSomeProduct(id) {
-            return axios.get('api/products/'+id);
+            return axios.get('/api/products/'+id);
         },
         async setProposed() {
             let arr = [];
             for (let i=1; i<5; i++) {
-                const singleProduct = await  this.getSomeProduct(i*2);
+                const singleProduct = await  this.getSomeProduct(i*2+1);
                 arr.push(singleProduct.data);
             }
             this.weeked = arr;

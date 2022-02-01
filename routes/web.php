@@ -14,6 +14,6 @@ use \App\Http\Controllers\MainPageController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('products/{id}', function($id) {return \App\Models\Product::with('options')->find($id);});
 Route::get('/{any}', [MainPageController::class, 'index'])->where('any', '.*');
 

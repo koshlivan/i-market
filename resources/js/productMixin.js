@@ -11,7 +11,7 @@ export default  {
        // productService.getAllProducts()
         axios.get('/api/products')
             .then((response) => {
-                this.products = response.data;
+                this.products = response.data.data;
             });
     }
 }

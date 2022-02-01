@@ -21,15 +21,15 @@ export default {
     components: {Navigator},
     data(){
         return {
-            logos : ['assets/BrandLogos/brand1.png',
-                     'assets/BrandLogos/brand2.png',
-                    'assets/BrandLogos/brand3.png',
-                    'assets/BrandLogos/brand4.png',
-                    'assets/BrandLogos/brand5.png',
-                    'assets/BrandLogos/brand6.png',
-                    'assets/BrandLogos/brand7.png',
-                    'assets/BrandLogos/brand8.png',
-                    'assets/BrandLogos/brand9.png',
+            logos : ['/assets/BrandLogos/brand1.png',
+                     '/assets/BrandLogos/brand2.png',
+                    '/assets/BrandLogos/brand3.png',
+                    '/assets/BrandLogos/brand4.png',
+                    '/assets/BrandLogos/brand5.png',
+                    '/assets/BrandLogos/brand6.png',
+                    '/assets/BrandLogos/brand7.png',
+                    '/assets/BrandLogos/brand8.png',
+                    '/assets/BrandLogos/brand9.png',
             ]
         }
     },

@@ -7,8 +7,8 @@
                 <h5 :class="{inactive : isLoginWindow, active : !isLoginWindow}"
                     @click="registerWindow">register</h5>
             </div>
-            <login-the v-show="isLoginWindow"></login-the>
-            <registration-the v-show="!isLoginWindow"></registration-the>
+            <login-the v-show="isLoginWindow" :user="user"></login-the>
+            <registration-the v-show="!isLoginWindow" @registration="registration($event)"></registration-the>
         </form>
     </div>
 </template>
@@ -25,6 +25,7 @@ export default {
     data() {
       return {
           isLoginWindow: true,
+          user: {}
       }
     },
     methods: {
@@ -36,6 +37,10 @@ export default {
         },
         registerWindow() {
             this.isLoginWindow = false;
+        },
+        registration(user) {
+            this.user = user;
+            this.isLoginWindow = true;
         }
     }
 

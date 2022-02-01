@@ -74,10 +74,13 @@ export default {
         }
     },
     created() {
-        axios.get('api/categories')
-            .then( response => {this.categories = response.data});
+        this.getCategories();
     },
     methods: {
+        getCategories() {
+            axios.get('api/categories')
+                .then( response => {this.categories = response.data});
+        },
        async submitModal() {
             console.log('start submit, chek option and image: '+this.imagePath, this.option);
             const product = {

@@ -1,7 +1,7 @@
 <template>
     <div class="col-xs-6 col-sm-4 shopcart justify-content-end">
         <div id="cart" class="btn-group btn-block mtb_40">
-            <button type="button" class="btn btn-cart" data-target="#cart-dropdown" data-toggle="collapse" aria-expanded="true">
+            <button type="button" class="btn btn-cart" @click="isOpenCart">
                 <span class="material-icons cart-ico">shopping_cart</span>
                 <div class="shop-cart-text">
                     <span id="shippingcart">Shopping cart</span>
@@ -15,15 +15,33 @@
 
 <script>
 import CartDropdown from "./CartDropdown";
+import {eventBus} from "../../app";
 export default {
     name: "logo-cart",
-    components: {CartDropdown}
+    components: {CartDropdown},
+    emits: [
+      'cartOpened'
+    ],
+    data() {
+        return {
+            isOpened : false
+        }
+    },
+    methods: {
+        isOpenCart() {
+            this.isOpened = !this.isOpened;
+            eventBus.$emit('cartOpened', this.isOpened);
+        }
+    }
 }
 </script>
 
 <style scoped>
 #cart{
     float: right;
+}
+.shopcart{
+    position: relative;
 }
 .btn span {
     color: white;
