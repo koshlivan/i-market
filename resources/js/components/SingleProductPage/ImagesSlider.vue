@@ -31,8 +31,10 @@ export default {
             images: []
         }
     },
-    watch() {
-      options: this.setImages()
+    watch: {
+      options() {
+          this.setImages()
+      }
     },
     created(){
         this.setImages()
@@ -42,7 +44,7 @@ export default {
             this.image = '/'+this.product.options[0].image;
         },
         setImages() {
-            for (option of this.options) {
+            for (let option of this.options) {
                 this.images.push(option.image);
             }
         },

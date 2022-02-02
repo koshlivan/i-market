@@ -36,18 +36,11 @@ export default {
     ],
     data() {
       return {
-          related: []
+          related : []
       }
     },
     computed: {
-        related() {
-            let arr = [];
-            for (let i=1; i <= 4; i++) {
-                arr.push(this.getSomeProduct(i*5));
-            }
 
-            return arr;
-        },
         product() {
             this.getProduct();
         }
@@ -67,7 +60,15 @@ export default {
                 arr.push(singleProduct.data);
             }
             this.related = arr;
-        }
+        },
+        // related() {
+        //     let arr = [];
+        //     for (let i=1; i <= 4; i++) {
+        //         arr.push(this.getSomeProduct(i*5));
+        //     }
+        //
+        //     return arr;
+        // }
     },
     created() {
         this.setProposed();

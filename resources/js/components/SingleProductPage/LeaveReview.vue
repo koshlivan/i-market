@@ -25,6 +25,9 @@ export default {
     props: [
       'product_id'
     ],
+    emits: [
+        'reviewLeaved'
+    ],
     data() {
         return {
             rating: 1,
@@ -44,6 +47,7 @@ export default {
                 product_id: this.product_id
             })
             .then(response => {
+                this.$emit('reviewLeaved', response.data);
                 alert('thanks for your '+response.data.review);
             });
         }

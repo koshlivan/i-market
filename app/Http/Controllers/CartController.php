@@ -14,8 +14,14 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-
-        return Cart::with('product')->get();
+            if ( isset($request->product_id) && isset($request->order_id) ) {
+                return Cart::where('product_id', $request->product_id)->where('order_id', $request->order_id)->get();
+            }
+            if ( isset($request->order_id) )
+            {
+                return Cart::with('product.options')->where('order_id', $request->order_id)->get();
+            }
+        return Cart::with('product.options')->get();
     }
 
     /**
@@ -26,14 +32,20 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'order' => ['required'],
+            'product' => ['required'],
+            'amount' => ['required']
+        ]);
+
         $cart = new Cart();
-        $cart->order_id = 1;
-        $cart->product_id = $request->product_id;
+        $cart->order_id = $request->order;
+        $cart->product_id = $request->product;
         $cart->amount = $request->amount;
 
         $cart->save();
 
-        return $cart;
+        return Cart::with('product')->find($cart->id);
     }
 
     /**
@@ -45,23 +57,25 @@ class CartController extends Controller
      */
     public function show(Request $request, int $id)
     {
-        return Cart::with('product')->findOrFail($id);
+        return Cart::with('product.options')->find($id);
     }
 
     /**
      * Update the specified resource in storage.
-     *
+     * @param App\Models\Cart $cart
      * @param  \Illuminate\Http\Request  $request
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, int $id)
     {
         $cart = Cart::findOrFail($id);
-        $cart->amount = $request->amount;
-        $cart->save();
 
-        return $cart;
+        if($request->amount !== '') {
+            $cart->amount = $request->amount;
+            $cart->update();
+        }
+        return Cart::find($id);
     }
 
     /**

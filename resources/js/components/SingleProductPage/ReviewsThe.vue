@@ -7,7 +7,7 @@
             </h5>
             <h5 @click="reviewsBut"
                 :class="{active : reviewsActive, inactive : !reviewsActive}">
-                {{'reviews ('+1+')'}}
+                {{'reviews ('+reviewCount+')'}}
             </h5>
             <h5 @click="solutionBut"
                 :class="{active : solutionActive, inactive : !solutionActive}">
@@ -21,14 +21,14 @@
                     at faucibus non, dictum a diam. Nunc vitae interdum diam. Sed finibus,
                     justo vel maximus facilisis, sapien turpis euismod tellus, vulputate semper
                     diam ipsum vel tellus.</p>
-                <div v-for="(comment, index) in comments" :key="index">
+                <div v-for="(comment, index) in comments" :key="index" class="oneComment">
                     <h5>{{comment.reviewer}}</h5>
                     <p>{{comment.review}}</p>
                     <stars-rating :rating="comment.rating"></stars-rating>
                 </div>
             </div>
             <div class="reviews" v-show="reviewsActive">
-                <leave-review :product_id="product.id"></leave-review>
+                <leave-review :product_id="product.id" @reviewLeaved="reviewLeaved($event)"></leave-review>
             </div>
             <div class="solution" v-show="solutionActive">
                 <p>
@@ -56,7 +56,12 @@ export default {
             overviewActive: true,
             reviewsActive: false,
             solutionActive: false,
-            comments: []
+            comments: [],
+        }
+    },
+    computed: {
+        reviewCount() {
+            return this.comments.length;
         }
     },
     created() {
@@ -83,6 +88,10 @@ export default {
                 .then(response => {
                     this.comments = response.data;
                 })
+        },
+        reviewLeaved(review) {
+            this.comments.push(review);
+            this.overviewBut();
         }
     }
 }
@@ -118,5 +127,18 @@ export default {
 }
 .inactive {
     color: white;
+}
+.oneComment {
+    margin-top: 0.5rem;
+    border-left: dotted 1px #aaa;
+    padding-left: 0.5rem;
+}
+.oneComment h5 {
+    text-transform: uppercase;
+    color: #ccc;
+}
+
+.oneComment p {
+    text-transform: capitalize;
 }
 </style>

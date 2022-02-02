@@ -5,7 +5,7 @@
                 <span class="material-icons cart-ico">shopping_cart</span>
                 <div class="shop-cart-text">
                     <span id="shippingcart">Shopping cart</span>
-                    <span id="cart-total">items (0)</span>
+                    <span id="cart-total">{{'items ('+items+')'}}</span>
                 </div>
             </button>
         </div>
@@ -24,13 +24,29 @@ export default {
     ],
     data() {
         return {
-            isOpened : false
+            isOpened : false,
+            itemsInCart : [],
+            items : 0
         }
+    },
+    created() {
+        eventBus.$on('itemsCartChange', () => {
+            this.totalItems();
+        })
+        this.totalItems()
     },
     methods: {
         isOpenCart() {
             this.isOpened = !this.isOpened;
             eventBus.$emit('cartOpened', this.isOpened);
+        },
+        totalItems() {
+            axios.get('/api/orders/'+1)
+            .then( response => {
+                console.log('cart total items: ', response.data);
+                this.itemsInCart = response.data.carts;
+                this.items = this.itemsInCart.length;
+            })
         }
     }
 }

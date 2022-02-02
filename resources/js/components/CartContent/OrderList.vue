@@ -1,7 +1,7 @@
 <template>
     <div class="order-list">
-        <div class="alert alert-success" role="alert" v-show="isHasConfirmed" @click="closeConfirmed">
-            Congratulations, your order has been sent!
+        <div class="confirmation" role="alert" v-show="isHasConfirmed" @click="closeConfirmed">
+            {{'Congratulations, your order has been sent! Sum to pay: $'+orderTotal.entireCost}}
         </div>
         <table>
             <tr>
@@ -18,7 +18,7 @@
                           :key="index"
                           :order="order"
                           @deletePosition="deletePosition(index)"
-                          @quantityChange="quantityChange($event, index)">
+                          @update:amount="quantityChange($event, index)">
             </order-single>
         </div>
         <h4>What would you like to do next?</h4>
@@ -45,37 +45,23 @@ export default {
     ],
     data() {
         return {
-            orderes : [
-                {image: '/assets/ProductPreview/product1-1.jpg',
-                name: 'Iphone',
-                model: 'XS',
-                price: 200,
-                quantity: 2
-                },
-                {image: '/assets/ProductPreview/product5-1.jpg',
-                    name: 'Xiaomi',
-                    model: 'E334',
-                    price: 300,
-                    quantity: 1
-                },
-                {image: '/assets/ProductPreview/product3-1.jpg',
-                    name: 'Nokia',
-                    model: '7X',
-                    price: 400,
-                    quantity: 3
-                },
-            ],
+            orderes : [],
             orderTotal: {
-                totalSum: 500,
+                totalSum: 0,
                 ecoTax: 2,
                 vat: 20,
-                entireCost: 522
+                entireCost: 0
             },
             isHasConfirmed : false,
             orders: [],
             products: [],
             carts: []
         }
+    },
+    computed: {
+        calculateWithVat() {
+            return this.calculateTotal() + this.orderTotal.ecoTax + this.orderTotal.vat;
+        },
     },
     created() {
       this.getAllValues()
@@ -87,18 +73,22 @@ export default {
                     this.orders = response.data;
                     this.carts = this.orders[0].carts;
                     this. products = await this.setProducts(this.carts);
-                    console.log('carts and products: ', this.carts, this.products);
                     await this.fillOrders(this.carts, this.products);
                     this.orderTotal.totalSum = this.calculateTotal();
+                    this.orderTotal.entireCost
+                        = this.orderTotal.totalSum
+                        + this.orderTotal.ecoTax
+                        + this.orderTotal.vat;
         },
         buyComplete() {
-            document.body.scrollTop = 0;
-            document.documentElement.scrollTop = 0;
-            this.isHasConfirmed = true;
-            axios.post('/api/orders/'+2
+
+            axios.put('/api/orders/'+2
                 +'?is_done='+true)
-            .then( response => {
+            .then( () => {
                 this.orderes = [];
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+                this.isHasConfirmed = true;
             })
         },
         closeConfirmed() {
@@ -121,7 +111,6 @@ export default {
         fillOrders(carts, products) {
             this.orderes = [];
             for (let i=0; i<carts.length; i++) {
-                console.log('product: ', products[i]);
                 const oneRow = {
                     cartId: carts[i].id,
                     model : products[i].name,
@@ -141,6 +130,7 @@ export default {
             }
             return total;
         },
+
         deletePosition(index) {
             this.orderes.splice(index, 1);
             this.orderTotal.totalSum = this.calculateTotal();
@@ -148,6 +138,10 @@ export default {
         quantityChange(amount, index) {
             this.orderes[index].quantity = amount;
             this.orderTotal.totalSum = this.calculateTotal();
+            this.orderTotal.entireCost
+                = this.orderTotal.totalSum
+                + this.orderTotal.ecoTax
+                + this.orderTotal.vat;
         }
     }
 }
@@ -199,5 +193,19 @@ h4 {
 .options-buttons button:active {
     color: rgb(66, 66, 66);
     background-color: rgb(100, 100, 100);
+}
+.confirmation {
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #7eb37e;
+    color: white;
+    border: dotted 2px #36c636;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin: 2rem 0;
 }
 </style>

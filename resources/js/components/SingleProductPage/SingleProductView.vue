@@ -6,7 +6,7 @@
                        @closePreview="closePreview"></images-slider>
         <div class="main-look">
             <div class="main-image">
-                <img :src="'/'+options[0].image" alt="this place for image">
+                <img :src="'/'+options[0].image" alt="this place for image" ref="mainImage">
                 <div class="product-images">
                     <img v-for="(image, index) in options"
                          :src="'/'+image.image"
@@ -67,7 +67,7 @@
                     <input type="number" v-model="buyAmount" min="1">
                 </div>
                 <div class="icons-actions">
-                    <h5 @click="addToCart"><i class="fas fa-shopping-cart"></i></h5>
+                    <add-to-cart-button @addToCart="addToCart"></add-to-cart-button>
                     <h5><i class="fas fa-heart"></i></h5>
                     <h5><i class="fas fa-tasks"></i></h5>
                 </div>
@@ -82,9 +82,10 @@ import StarsRating from "../Rating/StarsRating";
 import ReviewsThe from "./ReviewsThe";
 import productService from "../../productService";
 import ImagesSlider from "./ImagesSlider";
+import AddToCartButton from "../AddToCartButton";
 export default {
     name: "single-product-view",
-    components: {ImagesSlider, ReviewsThe, StarsRating},
+    components: {AddToCartButton, ImagesSlider, ReviewsThe, StarsRating},
     props: [
         'productId'
     ],
@@ -127,18 +128,25 @@ export default {
         },
         colorPicked(color, id) {
             this.colorOption = color;
-            this.image = this.product.options[id].image;
+            console.log('image: ', this.product.options[id].image);
+            this.$refs.mainImage.src = '/'+this.product.options[id].image;
+            //this.image = this.product.options[id].image;
         },
         addToCart() {
-            axios.post('/api/carts?product_id='
-                + this.productId+'&amount='
-                + this.buyAmount
-            )
-            .then(response => {
-                let name = response.data.product.name;
-                alert(name+' was added to the cart');
-            })
-            .catch(errors => console.log(errors));
+            if ( confirm('Add this product to cart?') ) {
+                console.log('is exist: '+productService.isCartExist(1, this.productId).data)
+                if (productService.isCartExist(1, this.productId).data !== '') return;
+                axios.post('/api/carts?product_id='
+                    + this.productId + '&amount='
+                    + this.buyAmount + '&order_id='+1
+                )
+                    .then(response => {
+                        let name = response.data.product.name;
+                        alert(name+' was added to the cart');
+                    })
+                    .catch(errors => console.log(errors));
+            }
+
         },
         imageClicked(index) {
             this.imageIndex = index;

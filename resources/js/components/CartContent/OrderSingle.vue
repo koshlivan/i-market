@@ -10,7 +10,7 @@
                 {{order.model}}
             </div>
             <div class="cell">
-                <input type="number" min="0" @change="sendQuantity" v-model="amount">
+                <input type="number" min="1" v-model="amount">
             </div>
             <div class="cell">
                 {{order.price}}
@@ -18,7 +18,7 @@
             <div class="cell">
                 {{totalPrice}}
             </div>
-            <div class="delete" @click.prevent="deletePosition">
+            <div class="delete" @click.prevent="deletePosition" title="Delete from cart">
                 <i class="fas fa-trash-alt"></i>
             </div>
     </div>
@@ -31,7 +31,7 @@ export default {
         'order'
     ],
     emits:[
-        'quantityChange',
+        'update:amount',
         'deletePosition'
     ],
     data() {
@@ -41,14 +41,18 @@ export default {
     },
     computed: {
         totalPrice() {
-            return this.order.price  * this.order.quantity;
+            return Number.parseFloat(this.order.price)  * Number.parseFloat(this.amount);
         },
         amount : {
             get() {
                 return this.order.quantity;
             },
             set(value) {
-                this.orderQuant = value;
+                axios.put('/api/carts/'+this.order.cartId+'?amount='+value)
+                    .then( () => {
+                        this.orderQuant = value;
+                        this.$emit('update:amount', value);
+                    });
             }
         }
     },

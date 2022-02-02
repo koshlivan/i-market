@@ -3,13 +3,18 @@
         <a href="#"><i class="fas fa-heart"></i></a>
         <a href="#"><i class="far fa-eye"></i></a>
         <a href="#"><i class="fas fa-tasks"></i></a>
-        <a href="#"><i class="fas fa-shopping-cart"></i></a>
+        <add-to-cart-button @addToCart="$emit('addToCart')"></add-to-cart-button>
     </div>
 </template>
 
 <script>
+import AddToCartButton from "../AddToCartButton";
 export default {
-    name: "product-menu"
+    name: "product-menu",
+    components: {AddToCartButton},
+    emits: [
+        'addToCart'
+    ]
 }
 </script>
 

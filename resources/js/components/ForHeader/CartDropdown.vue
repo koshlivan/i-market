@@ -2,37 +2,31 @@
     <div id="cart-dropdown" class="cart-menu collapse" ref="cart">
         <ul>
             <li>
-                <table class="table table-striped">
-                    <tbody>
-                    <tr class="table-row">
-                        <td class="text-center"><img src="/assets/none.png" alt="iPod Classic" title="iPod Classic"></td>
-                        <td class="text-left product-name">
-                            <a href="#">{{  }}</a> <span class="text-left price">{{ '$' }}</span>
-                            <input class="cart-qty" name="product_quantity" min="1" value="1" type="number">
-                        </td>
-                        <td class="text-center"><a class="close-cart"><i class="fa fa-times-circle"></i></a></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <cart-dropdown-item v-for="(position, index) in positions"
+                                    :key="index"
+                                    :position="position"
+                                    @positionRemoved="positionRemoved(index)"
+                                    @update:amount="amountChanges($event, position.cart_id, index)"></cart-dropdown-item>
+
             </li>
             <li>
                 <table class="table">
                     <tbody>
                     <tr>
                         <td class="text-right"><strong>Sub-Total</strong></td>
-                        <td class="text-right">$2,100.00</td>
+                        <td class="text-right">{{ '$'+totalSum }}</td>
                     </tr>
                     <tr>
-                        <td class="text-right"><strong>Eco Tax (-2.00)</strong></td>
-                        <td class="text-right">$2.00</td>
+                        <td class="text-right"><strong>{{ 'Eco Tax ('+invoice.eco+')' }}</strong></td>
+                        <td class="text-right">{{ '$'+invoice.eco}}</td>
                     </tr>
                     <tr>
-                        <td class="text-right"><strong>VAT (20%)</strong></td>
-                        <td class="text-right">$20.00</td>
+                        <td class="text-right"><strong>{{ 'VAT ('+invoice.vat+')' }}</strong></td>
+                        <td class="text-right">{{ '$'+invoice.vat}}</td>
                     </tr>
                     <tr>
                         <td class="text-right"><strong>Total</strong></td>
-                        <td class="text-right">$2,122.00</td>
+                        <td class="text-right">{{ '$'+totalSumWithVAt }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -49,51 +43,82 @@
 <script>
 import {eventBus} from "../../app";
 import productService from "../../productService";
+import CartDropdownItem from "./CartDropdownItem";
 export default {
     name: "cart-dropdown",
+    components: {CartDropdownItem},
     props: [
 
     ],
     data() {
         return {
-            order: {},
-            carts: [],
-            productIds: [],
-            products: []
+            order : {},
+            carts : [],
+            productIds : [],
+            products : [],
+            positions: [],
+            totalForProducts : 0,
+            invoice : {
+                eco : 2,
+                vat : 20
+            },
         }
     },
-
+    computed: {
+      totalSumWithVAt() {
+          return this.totalSum + this.invoice.eco + this.invoice.vat;
+      },
+        totalSum() {
+          let sum = 0;
+          for (let position of this.positions) {
+              sum += position.price*position.amount;
+          }
+            return sum;
+        }
+    },
     created() {
-            eventBus.$on('cartOpened', (event) => this.showCart(event))
+            eventBus.$on('cartOpened', (event) => this.showCart(event));
     },
     methods : {
-        showCart(yes) {
+        async showCart(yes) {
             if (yes === true ){
-                axios.get('/api/orders'+1)
+                this.positions = [];
+                axios.get('/api/orders/'+1)
                 .then(response => {
-                    this.order = response.data;
                     this.carts = response.data.carts;
-
-                    console.log('response carts: ', JSON.stringify(this.carts));
-
+                    this.mergeToPosition(this.carts);
                     this.$refs.cart.style.height = 'auto';
                 })
             } else {
                 this.$refs.cart.style.height = '0';
-                this.orders = [];
+                this.positions = [];
             }
         },
-        getProducts(productArray){
-            // for (id of productArray) {
-            //     productService.getSingleProduct(id).
-            //     then(response => {
-            //         this.products.push(response.data);
-            //     })
-            // }
+        mergeToPosition(carts) {
+          for (let i=0; i < carts.length; i++) {
+              let position = {};
+              position.cart_id = carts[i].id;
+              position.amount = carts[i].amount;
+              position.price = carts[i].product.price;
+              position.name = carts[i].product.name;
+              position.image = carts[i].product.options[0].image;
+
+              this.positions.push(position);
+          }
         },
         viewCart(event) {
             eventBus.$emit('cartOpened', event);
-            this.$router.push('cart');
+            this.$router.push({name : 'cart'});
+        },
+        amountChanges(newAmount, id, index) {
+            axios.put('/api/carts/'+id
+                                        +'?amount='
+                                        +newAmount)
+            .then( () => this.positions[index].amount = newAmount);
+        },
+        positionRemoved(index) {
+            this.positions.splice(index, 1);
+            eventBus.$emit('itemsCartChange');
         }
     }
 }
@@ -143,11 +168,6 @@ ul {
     width: 100%;
     padding: 0.5rem;
 }
-.table-row {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-}
 .table-row td:first-child {
     width: 40%;
 }
@@ -156,9 +176,6 @@ img {
 }
 i {
     color: rgb(66, 66, 66);
-}
-.cart-qty {
-    width: 3rem;
 }
 a {
     text-decoration: none;

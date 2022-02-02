@@ -14,7 +14,10 @@ export default {
                 order : sorting.order,
             }})
     },
-
+    isCartExist(order, product) {
+      return axios.get('/carts?order_id='+order
+                            +'&product_id='+product);
+    },
     getSingleProduct(id) {
         console.log('in service, id is: ', id);
       return axios.get('/api/products/'+id);
@@ -55,5 +58,20 @@ export default {
           description: product.description
       })
     },
-
+    addToCart(order, product, amount=1) {
+        if ( confirm('Add this product to the cart?') ) {
+            console.log(JSON.stringify(this.isCartExist(order, product)));
+            //if ( this.isCartExist(order, product).data !== '') return;
+            console.log('come through if');
+            axios.post('/api/carts?product='
+                + product + '&amount='
+                + amount + '&order=' + order
+            )
+                .then(response => {
+                    let name = response.data.product.name;
+                    alert(name+' was added to the cart');
+                })
+                .catch(errors => console.log(errors));
+        }
+    }
 }

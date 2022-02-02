@@ -16,7 +16,7 @@
             <h3 class="price">{{'$'+product.price}}</h3>
         </div>
         <div class="product-actions">
-            <product-menu></product-menu>
+            <product-menu @addToCart="addToCart"></product-menu>
         </div>
     </div>
 
@@ -24,6 +24,7 @@
 
 <script>
 import ProductMenu from "./ProductMenu";
+import productService from "../../productService";
 export default {
     name: "product-preview",
     components: {ProductMenu},
@@ -46,13 +47,16 @@ export default {
         }
     },
     methods: {
-        imgHover(){
+        imgHover() {
             if (this.product.options[1].image !== '') {
                 this.image = this.product.options[1].image;
             }
         },
-        imgBack(){
+        imgBack() {
             this.image = this.product.options[0].image;
+        },
+        addToCart() {
+            productService.addToCart(2, this.product.id);
         }
     }
 }

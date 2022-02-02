@@ -15,7 +15,7 @@
                      :class="{'lefted' : images[imageIndex].placeLeft, 'righted' : !images[imageIndex].placeLeft}">
                     <h4 class="text-uppercase">{{images[imageIndex].description}}</h4>
                     <h1 class="text-uppercase">{{images[imageIndex].lure}}</h1>
-                    <a href="#" class="text-uppercase">buy now</a>
+                    <a href="#" class="text-uppercase" @click="buyNowFromBanner(images[imageIndex].product_id)">buy now</a>
                 </div>
             </div>
         </div>
@@ -28,9 +28,24 @@ export default {
     data() {
         return {
             images : [
-                {src : 'assets/main_banner1.jpg', description: 'wow wow wow', lure: 'buy buy now', placeLeft: false},
-                {src : 'assets/main_banner2.jpg', description: 'blow your mind', lure: 'change your life', placeLeft: true},
-                {src : 'assets/main_banner3.jpg', description: 'how did you live without it?', lure: 'your main buy', placeLeft: false}],
+                {   src : 'assets/main_banner1.jpg',
+                    description: 'wow wow wow',
+                    lure: 'buy buy now',
+                    placeLeft: false,
+                    product_id : 1
+                },
+                {   src : 'assets/main_banner2.jpg',
+                    description: 'blow your mind',
+                    lure: 'change your life',
+                    placeLeft: true,
+                    product_id : 2
+                },
+                {   src : 'assets/main_banner3.jpg',
+                    description: 'how did you live without it?',
+                    lure: 'your main buy',
+                    placeLeft: false,
+                    product_id : 3
+                }],
             imageSrc : this.imageNow,
             imageIndex : 0,
         }
@@ -62,6 +77,9 @@ export default {
                 }
             }, interval);
         },
+        buyNowFromBanner(id) {
+            this.$router.push({path : '/product/'+id});
+        }
     },
 
 }
