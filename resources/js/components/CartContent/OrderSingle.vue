@@ -28,7 +28,8 @@
 export default {
     name: "order-single",
     props: [
-        'order'
+        'order',
+        'index'
     ],
     emits:[
         'update:amount',
@@ -48,11 +49,17 @@ export default {
                 return this.order.quantity;
             },
             set(value) {
-                axios.put('/api/carts/'+this.order.cartId+'?amount='+value)
-                    .then( () => {
-                        this.orderQuant = value;
-                        this.$emit('update:amount', value);
-                    });
+                this.orderQuant = value;
+                let orders = JSON.parse( localStorage.getItem('order'));
+                orders[this.index].amount = value;
+                localStorage.setItem('order', JSON.stringify(orders));
+                this.$emit('update:amount', value);
+
+                // axios.put('/api/carts/'+this.order.cartId+'?amount='+value)
+                //     .then( () => {
+                //         this.orderQuant = value;
+                //         this.$emit('update:amount', value);
+                //     });
             }
         }
     },
@@ -64,10 +71,14 @@ export default {
             });
         },
         deletePosition() {
-            axios.delete('/api/carts/'+this.order.cartId)
-            .then( () => {
-                this.$emit('deletePosition');
-            })
+            let orders = JSON.parse( localStorage.getItem('order') );
+            orders.splice(this.index, 1);
+            localStorage.setItem('order', JSON.stringify(orders));
+            this.$emit('deletePosition');
+            // axios.delete('/api/carts/'+this.order.cartId)
+            // .then( () => {
+            //     this.$emit('deletePosition');
+            // })
         }
     }
 }

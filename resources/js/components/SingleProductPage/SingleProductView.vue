@@ -67,7 +67,7 @@
                     <input type="number" v-model="buyAmount" min="1">
                 </div>
                 <div class="icons-actions">
-                    <add-to-cart-button @addToCart="addToCart"></add-to-cart-button>
+                    <add-to-cart-button @addToCart="addToCartLocal"></add-to-cart-button>
                     <h5><i class="fas fa-heart"></i></h5>
                     <h5><i class="fas fa-tasks"></i></h5>
                 </div>
@@ -147,6 +147,9 @@ export default {
                     .catch(errors => console.log(errors));
             }
 
+        },
+        addToCartLocal(){
+            productService.addToCartLocal(this.product.id, this.buyAmount);
         },
         imageClicked(index) {
             this.imageIndex = index;

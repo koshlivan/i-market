@@ -39,12 +39,16 @@ export default {
     },
     methods : {
         deletePosition() {
-            if ( confirm("Are you sure? Position will be deleted") ) {
-                axios.delete('/api/carts/'+this.position.cart_id)
-                .then( () => {
-                    this.$emit('positionRemoved');
-                })
-            }
+            let orders = JSON.parse( localStorage.getItem('order') );
+            orders.splice(this.index, 1);
+            localStorage.setItem('order', JSON.stringify(orders));
+            this.$emit('positionRemoved');
+            // if ( confirm("Are you sure? Position will be deleted") ) {
+            //     axios.delete('/api/carts/'+this.position.cart_id)
+            //     .then( () => {
+            //         this.$emit('positionRemoved');
+            //     })
+            // }
         }
     }
 }

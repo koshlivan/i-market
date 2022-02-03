@@ -1,3 +1,4 @@
+import Empty404 from "./components/Empty404";
 
 
 require('./bootstrap');
@@ -74,10 +75,37 @@ const router = new VueRouter( {
         {
             path: '/admin',
             name: 'admin',
-            component: Admin
-        }
+            component: Admin,
+            beforeEnter: (to, from, next) => {
+                if ( !localStorage.getItem('x_xsrf_token') ) {
+                    alert('You have to login for begining');
+                    next('/login');
+                } else if ( localStorage.getItem('mayornot') === 'mayorNot') {
+                    alert('You don\'t have permissions for that');
+                    next('/');
+                } else {
+                    next();
+                }
+            }
+        },
+        {
+            path: '/*',
+            name: 'empty',
+            component: Empty404
+        },
     ]
 })
+// router.beforeEach((to, from, next) => {
+//     if (to.name === 'admin') {
+//         next('/');
+//     } else {
+//         next();
+//     }
+//
+// });
+
+
+
 export const eventBus = new Vue();
 
 const app = new Vue({

@@ -83,12 +83,29 @@ export default {
         async showCart(yes) {
             if (yes === true ){
                 this.positions = [];
-                axios.get('/api/orders/'+1)
-                .then(response => {
-                    this.carts = response.data.carts;
-                    this.mergeToPosition(this.carts);
-                    this.$refs.cart.style.height = 'auto';
+
+                productService.cartItems().then( carts => {
+                    this.carts = carts;
+                    this.positions = [];
+                    for (let order of this.carts) {
+                        const ord = {
+                            image : order.product.options[0].image,
+                            price : order.product.price,
+                            model : order.product.brand,
+                            name : order.product.name,
+                            amount : order.amount
+                        }
+                        this.positions.push(ord);
+                        //this.orderTotal.totalSum = this.calculateTotal();
+                    }
                 })
+                this.$refs.cart.style.height = 'auto';
+                // axios.get('/api/orders/'+1)
+                // .then(response => {
+                //     this.carts = response.data.carts;
+                //     this.mergeToPosition(this.carts);
+                //     this.$refs.cart.style.height = 'auto';
+                // })
             } else {
                 this.$refs.cart.style.height = '0';
                 this.positions = [];
@@ -111,10 +128,14 @@ export default {
             this.$router.push({name : 'cart'});
         },
         amountChanges(newAmount, id, index) {
-            axios.put('/api/carts/'+id
-                                        +'?amount='
-                                        +newAmount)
-            .then( () => this.positions[index].amount = newAmount);
+            let orders = JSON.parse( localStorage.getItem('order'));
+            orders[index].amount = newAmount;
+            localStorage.setItem('order', JSON.stringify(orders));
+            this.positions[index].amount = newAmount;
+            // axios.put('/api/carts/'+id
+            //                             +'?amount='
+            //                             +newAmount)
+            // .then( () => this.positions[index].amount = newAmount);
         },
         positionRemoved(index) {
             this.positions.splice(index, 1);

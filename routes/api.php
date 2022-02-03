@@ -25,7 +25,10 @@ use \App\Http\Controllers\CartController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-//Route::get('products/{id}', function($id) {return \App\Models\Product::with('options')->find($id);});
+//Route::group(['middleware' => 'sanctum'], function() {
+//   Route::get('');
+//});
+
 Route::apiResources([
     'products' => ProductController::class,
     'product-options' => ProductOptionController::class,

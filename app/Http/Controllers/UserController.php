@@ -10,7 +10,19 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-
+    /*
+     * @param Request $request
+     *
+     * @return Response
+     * */
+    public function index(Request $request)
+    {
+        if ( isset($request->permission) )
+        {
+            return Auth::user()->is_admin;
+        }
+        return Auth::user();
+    }
     /*
      * @param Request $request
      *

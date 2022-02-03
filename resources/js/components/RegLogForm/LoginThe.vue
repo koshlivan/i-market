@@ -1,5 +1,8 @@
 <template>
     <div class="login-part">
+        <h6 v-if="errors" class="error">
+            <span v-for="(error, index) in errorMessages" :key="index">{{error}}</span>
+        </h6>
         <input type="text" placeholder="Username" v-model.trim="name">
         <input type="password" placeholder="Password" v-model.trim="password">
         <div class="memory">
@@ -26,22 +29,45 @@ export default {
 
                 name: '',
                 password: '',
-                remember: false
+                remember: false,
+                errors: false,
+                errorMessages: []
         }
     },
     methods: {
         submit() {
             axios.get('/sanctum/csrf-cookie')
                 .then( response => {
-                    axios.post('/api/users/login', {
+                    //axios.post('/api/users/login', {
+                    axios.post('/login', {
                         name: this.name,
                         password: this.password,
-                        remember: this.remember
+                        remember_token: this.remember
                     })
-                    .then( () => {
+                    .then( (respond) => {
+                            const token = localStorage.getItem('x_xsrf_token');
+                            if (!token) {
+                                localStorage.setItem('x_xsrf_token', respond.config.headers['X-XSRF-TOKEN']);
+                            }
+                            axios.get('/api/user')
+                            .then( res => {
+                                const mayornot = localStorage.getItem('mayornot');
+                                if (!mayornot) {
+                                    if (res.data['is_admin'] > 0) {
+                                        localStorage.setItem('mayornot', 'Mayornot');
+                                    } else {
+                                        localStorage.setItem('mayornot', 'mayorNot');
+                                    };
+                                }
+                            })
                             alert('login successfull');
                             eventBus.$emit('loggedIn');
                             this.$router.push('shop');
+                            console.log('login response: ', JSON.stringify(response));
+                        })
+                        .catch( (error) => {
+                            this.errors = true;
+                            this.errorMessages = error.response.data.errors;
                         });
             })
             .catch(errors => {console.log(errors)});

@@ -18,7 +18,8 @@
                           :key="index"
                           :order="order"
                           @deletePosition="deletePosition(index)"
-                          @update:amount="quantityChange($event, index)">
+                          @update:amount="quantityChange($event, index)"
+                          :index="index">
             </order-single>
         </div>
         <h4>What would you like to do next?</h4>
@@ -38,6 +39,7 @@
 import OrderSingle from "./OrderSingle";
 import PaymentOptions from "./PaymentOptions";
 import InvoiceThe from "./InvoiceThe";
+import productService from "../../productService";
 export default {
     name: "order-list",
     components: {InvoiceThe, PaymentOptions, OrderSingle},
@@ -64,7 +66,8 @@ export default {
         },
     },
     created() {
-      this.getAllValues()
+      //this.getAllValues()
+        this.getOrders();
     },
     methods : {
         async getAllValues() {
@@ -79,6 +82,24 @@ export default {
                         = this.orderTotal.totalSum
                         + this.orderTotal.ecoTax
                         + this.orderTotal.vat;
+        },
+        getOrders() {
+            productService.cartItems().then(orders => {
+                console.log('order list, promise: ', orders);
+                this.orders = orders;
+                this.orderes = [];
+                for (let order of this.orders) {
+                    const ord = {
+                        image : order.product.options[0].image,
+                        price : order.product.price,
+                        model : order.product.brand,
+                        name : order.product.name,
+                        quantity : order.amount
+                    }
+                    this.orderes.push(ord);
+                    this.orderTotal.totalSum = this.calculateTotal();
+                }
+            });
         },
         buyComplete() {
 

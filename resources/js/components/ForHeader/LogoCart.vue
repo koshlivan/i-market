@@ -33,6 +33,9 @@ export default {
         eventBus.$on('itemsCartChange', () => {
             this.totalItems();
         })
+        eventBus.$on('addToCart', () => {
+            this.totalItems();
+        })
         this.totalItems()
     },
     methods: {
@@ -41,12 +44,15 @@ export default {
             eventBus.$emit('cartOpened', this.isOpened);
         },
         totalItems() {
-            axios.get('/api/orders/'+1)
-            .then( response => {
-                console.log('cart total items: ', response.data);
-                this.itemsInCart = response.data.carts;
-                this.items = this.itemsInCart.length;
-            })
+            let orders = JSON.parse( localStorage.getItem('order'));
+            this.items = orders.length;
+
+            // axios.get('/api/orders/'+1)
+            // .then( response => {
+            //     console.log('cart total items: ', response.data);
+            //     this.itemsInCart = response.data.carts;
+            //     this.items = this.itemsInCart.length;
+            // })
         }
     }
 }

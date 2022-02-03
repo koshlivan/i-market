@@ -9,11 +9,11 @@
                 </div>
                 <div class="col-xs-12 col-sm-8">
                     <ul class="header-top-right text-right">
-                        <li><router-link tag="a" class="link-to" to="/admin">Admin management</router-link></li>
-                        <li class="account" v-show="!isLogged">
+                        <li v-show="isAdmin"><router-link tag="a" class="link-to" to="/admin">Admin management</router-link></li>
+                        <li class="account" v-show="!token">
                             <router-link tag="a" class="link-to" to="/login">Account</router-link>
                         </li>
-                        <li class="account" v-show="isLogged">
+                        <li class="account" v-show="token">
                             <a href="#" @click.prevent="logout">Logout</a>
                         </li>
                         <li class="language dropdown align"> <span
@@ -57,22 +57,38 @@ export default {
     name: "Header-Top",
     data() {
         return {
-            isLogged: false
+            isLogged: false,
+            token: false,
+            isAdmin: false
         }
     },
     methods: {
         logout() {
-            axios.post('/api/users/logout')
+            //axios.post('/api/users/logout')
+            axios.post('/logout')
             .then( () => {
-                this.isLogged = false;
+                localStorage.removeItem('x_xsrf_token');
+                localStorage.removeItem('mayornot');
+                this.checkToken();
+                this.$router.push({name : 'home'});
             });
+        },
+        checkToken() {
+            if ( localStorage.getItem('x_xsrf_token') ) {
+                this.token = true;
+            } else {
+                this.token = false;
+            }
         }
     },
     created() {
         eventBus.$on('loggedIn', () => {
-            this.isLogged = true;
+            this.checkToken();
         })
-    }
+    },
+    mounted() {
+        this.checkToken()
+    },
 }
 </script>
 
@@ -137,5 +153,8 @@ export default {
 }
 .dropdown-item{
 
+}
+small   {
+    margin-left: 0.5rem;
 }
 </style>

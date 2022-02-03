@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import {eventBus} from "../../app";
+
 export default {
     name: "registration-the",
     emits: [
@@ -35,20 +37,33 @@ export default {
                 this.errors = true;
                 this.errorMessage = 'Passwords do not match'
             } else {
-                axios.post('/api/users/register', {
-                    name: this.name,
-                    email: this.email,
-                    password: this.password
-                })
-                .then( () => {
-                    this.$emit('registration');
-                })
-                .catch( (error) => {
-                    this.errorMessages = error.response.data.errors;
+                axios.get('/sanctum/csrf-cookie').then(response => {
+                    //axios.post('/api/users/register', {
+                    axios.post('/register', {
+                        name: this.name,
+                        email: this.email,
+                        password: this.password
+                    })
+                    .then( (respond) => {
+                        localStorage.setItem('x_xsrf_token', respond.config.headers['X-XSRF-TOKEN']);
+                        axios.get('/api/user')
+                            .then( res => {
+                                const mayornot = localStorage.getItem('mayornot');
+                                if (!mayornot) {
+                                    if (res.data['is_admin'] > 0) {
+                                        localStorage.setItem('mayornot', 'Mayornot');
+                                    } else {
+                                        localStorage.setItem('mayornot', 'mayorNot');
+                                    };
+                                }
+                            })
+                        eventBus.$emit('loggedIn');this.$router.push({name: 'shop'});
+                    })
+                    .catch( (error) => {
+                        this.errors = true;
+                        this.errorMessages = error.response.data.errors;
+                    });
                 });
-
-
-                //this.$router.push({name: 'shop'});
             }
         }
     }

@@ -9,11 +9,12 @@
             </div>
             <div class="shop">
                 <sorting-the @showPicked="showPicked($event)"
+                             @viewModePlates="viewModePlates($event)"
                              @sortPicked="sortPicked($event)"></sorting-the>
                 <div class="spinner-border loading" role="status" v-show="loading">
                     <span class="sr-only">Loading...</span>
                 </div>
-                <div class="view-container">
+                <div class="view-container" ref="products">
                     <product-preview v-for="(product, index) in products"
                                      :key="index"
                                      :product="product"></product-preview>
@@ -100,6 +101,17 @@ export default {
             if (event === false) {
                 this.pagePicked(--this.currentPage);
             }
+        },
+        viewModePlates(view) {
+            if (view === true) {
+                this.$refs.products.style.flexDirection = 'column';
+                this.$refs.products.style.justifyContent = 'flex-start';
+                this.$refs.products.style.alignItems = 'stretch';
+            } else {
+                this.$refs.products.style.flexDirection = 'row';
+                this.$refs.products.style.justifyContent = 'space-between';
+                this.$refs.products.style.alignItems = 'flex-start';
+            }
         }
     },
     mounted() {
@@ -138,5 +150,14 @@ export default {
     height: 3rem;
     margin: 2rem;
     color: red;
+}
+
+@media (orientation: portrait) {
+    .view-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+    }
 }
 </style>

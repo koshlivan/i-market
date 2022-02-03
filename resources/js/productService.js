@@ -19,7 +19,7 @@ export default {
                             +'&product_id='+product);
     },
     getSingleProduct(id) {
-        console.log('in service, id is: ', id);
+        //console.log('in service, id is: ', id);
       return axios.get('/api/products/'+id);
     },
 
@@ -73,5 +73,39 @@ export default {
                 })
                 .catch(errors => console.log(errors));
         }
+    },
+    addToCartLocal(product, amount=1) {
+        let orders = [];
+        if ( !localStorage.getItem('order') ) {
+            orders = [];
+        } else {
+            orders = JSON.parse(localStorage.getItem('order'));
+        }
+        const cart = {
+            product_id : product,
+            amount : amount
+        }
+        let exist = orders.findIndex(cart => cart.product_id === product);
+        if (exist < 0) {
+            orders.push(cart);
+        } else {
+            orders[exist].amount = Number.parseInt(orders[exist].amount) + Number.parseInt(amount);
+        }
+        localStorage.setItem('order', JSON.stringify(orders));
+    },
+    async cartItems() {
+        let orders = [];
+        const carts = JSON.parse( localStorage.getItem('order') );
+        for (let i = 0; i < carts.length ; i++) {
+            let id = Number.parseInt(carts[i].product_id);
+            const product = await this.getSingleProduct(id);
+            const order = {
+                product: product.data,
+                amount: carts[i].amount
+            }
+            orders.push(order);
+        }
+        console.log('services orders array: ', orders);
+        return orders;
     }
 }

@@ -56,7 +56,8 @@ export default {
             this.image = this.product.options[0].image;
         },
         addToCart() {
-            productService.addToCart(2, this.product.id);
+            //productService.addToCart(2, this.product.id);
+            productService.addToCartLocal(this.product.id);
         }
     }
 }
@@ -127,6 +128,8 @@ h4 {
         flex-direction: row;
         justify-content: flex-start;
         align-items: stretch;
+        height: 30vh;
+        max-width: 100%;
     }
     .image {
         width: 33%;
