@@ -30,7 +30,8 @@ h5  {
 .adder {
     position: fixed;
     right: 2rem;
-    bottom: 10%;
+    top: 50%;
+    transform: translateY(-50%);
     margin: 1rem;
     width: 4rem;
     height: 4rem;

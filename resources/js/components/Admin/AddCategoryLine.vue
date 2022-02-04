@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import {eventBus} from "../../app";
+
 export default {
     name: "add-category-line",
     emits: [
@@ -20,17 +22,23 @@ export default {
     ],
     data() {
         return {
-            categoryName: ''
+            categoryName: '',
+            errors: []
             }
     },
     methods : {
         addNewCategory() {
-            axios.post('api/categories', {
-                name: this.categoryName
+            axios.post('/api/categories', {
+                name: this.categoryName.toLowerCase()
             })
             .then(response => {
                 this.$emit('addCategory', response.data);
+                eventBus.$emit('resetSort');
                 this.categoryName = '';
+            })
+            .catch( errors => {
+                this.errors = errors.response.data.errors;
+                alert('Category is already exist');
             })
         },
         cancelNew() {

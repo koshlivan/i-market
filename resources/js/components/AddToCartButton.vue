@@ -10,12 +10,13 @@ import  {eventBus} from "../app";
 export default {
     name: "add-to-cart-button",
     emits: [
+        'itemsCartChange',
         'addToCart'
     ],
     methods: {
         addToCart() {
             this.$emit('addToCart');
-            eventBus.$emit('addToCart');
+            eventBus.$emit('itemsCartChange');
         }
     }
 }

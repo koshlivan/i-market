@@ -4,7 +4,8 @@ export default  {
     data () {
         return {
             products : [],
-            paginate : {}
+            currentPage: 1,
+            amount: 1
         }
     },
     created() {
@@ -12,6 +13,8 @@ export default  {
         axios.get('/api/products')
             .then((response) => {
                 this.products = response.data.data;
+                this.amount = response.data.last_page;
+                this.currentPage = response.data.current_page;
             });
     }
 }

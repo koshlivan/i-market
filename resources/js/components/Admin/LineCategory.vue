@@ -42,7 +42,7 @@ export default {
             window.scroll(0, 0);
         },
         saveClick() {
-            axios.put('api/categories/'+this.category.id, {
+            axios.put('/api/categories/'+this.category.id, {
                 name : this.categName
             })
             .then( response => {
@@ -54,9 +54,12 @@ export default {
             this.isEditing = false;
         },
         deleteOne() {
-            axios.delete('api/categories/'+this.category.id)
+            axios.delete('/api/categories/'+this.category.id)
             .then( response => {
-                this.$emit('deleteOne')
+                this.$emit('deleteOne');
+            })
+            .catch( errors => {
+                alert(errors.response.data.message);
             })
         }
     }
@@ -74,7 +77,7 @@ export default {
     }
     h5 {
         text-transform: capitalize;
-        padding: 1rem 3rem;
+        padding: 0.2rem 3rem;
         border-rigth: solid 1px rgb(156, 156, 156);
     }
     button {

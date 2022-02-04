@@ -6,7 +6,7 @@
                                     :key="index"
                                     :position="position"
                                     @positionRemoved="positionRemoved(index)"
-                                    @update:amount="amountChanges($event, position.cart_id, index)"></cart-dropdown-item>
+                                    @update:amount="amountChanges($event, index)"></cart-dropdown-item>
 
             </li>
             <li>
@@ -64,6 +64,9 @@ export default {
             },
         }
     },
+    watch: {
+        //positions: this.getCartItems()
+    },
     computed: {
       totalSumWithVAt() {
           return this.totalSum + this.invoice.eco + this.invoice.vat;
@@ -82,63 +85,51 @@ export default {
     methods : {
         async showCart(yes) {
             if (yes === true ){
-                this.positions = [];
-
-                productService.cartItems().then( carts => {
-                    this.carts = carts;
-                    this.positions = [];
-                    for (let order of this.carts) {
-                        const ord = {
-                            image : order.product.options[0].image,
-                            price : order.product.price,
-                            model : order.product.brand,
-                            name : order.product.name,
-                            amount : order.amount
-                        }
-                        this.positions.push(ord);
-                        //this.orderTotal.totalSum = this.calculateTotal();
-                    }
-                })
+                this.getCartItems();
                 this.$refs.cart.style.height = 'auto';
-                // axios.get('/api/orders/'+1)
-                // .then(response => {
-                //     this.carts = response.data.carts;
-                //     this.mergeToPosition(this.carts);
-                //     this.$refs.cart.style.height = 'auto';
-                // })
             } else {
                 this.$refs.cart.style.height = '0';
                 this.positions = [];
             }
         },
-        mergeToPosition(carts) {
-          for (let i=0; i < carts.length; i++) {
-              let position = {};
-              position.cart_id = carts[i].id;
-              position.amount = carts[i].amount;
-              position.price = carts[i].product.price;
-              position.name = carts[i].product.name;
-              position.image = carts[i].product.options[0].image;
-
-              this.positions.push(position);
-          }
+        getCartItems(){
+            productService.cartItems().then( carts => {
+                this.carts = carts;
+                this.positions = [];
+                for (let order of this.carts) {
+                    const ord = {
+                        image : order.product.options[0].image,
+                        price : order.product.price,
+                        model : order.product.brand,
+                        name : order.product.name,
+                        amount : order.amount
+                    }
+                    this.positions.push(ord);
+                }
+            })
         },
         viewCart(event) {
             eventBus.$emit('cartOpened', event);
             this.$router.push({name : 'cart'});
         },
         amountChanges(newAmount, id, index) {
-            let orders = JSON.parse( localStorage.getItem('order'));
+            let orders = JSON.parse(
+                productService.decrypt(
+                    localStorage.getItem('order')
+                )
+            );
             orders[index].amount = newAmount;
-            localStorage.setItem('order', JSON.stringify(orders));
+            localStorage.setItem('order',
+                productService.encrypt(
+                    JSON.stringify(orders)
+                )
+            );
             this.positions[index].amount = newAmount;
-            // axios.put('/api/carts/'+id
-            //                             +'?amount='
-            //                             +newAmount)
-            // .then( () => this.positions[index].amount = newAmount);
         },
         positionRemoved(index) {
+            //this.getCartItems();
             this.positions.splice(index, 1);
+            console.log('cartdropdown positions: ',this.positions);
             eventBus.$emit('itemsCartChange');
         }
     }

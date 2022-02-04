@@ -92,7 +92,10 @@ export default {
                 description: this.description,
                 category_id: this.pickedCategory
             };
-            const newProduct = await productService.createProduct(product);
+
+            const newProduct = await productService.createProduct(product).catch( error => {
+                alert(error.response.data.message);
+            });
            console.log('image and options before sending to service: ', newProduct.data.id, this.imagePath, this.option);
            await productService.createProductOption(newProduct.data.id, this.imagePath, this.option);
            this.$emit('submitModal', newProduct.data.id);

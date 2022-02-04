@@ -25,6 +25,9 @@
 </template>
 
 <script>
+import productService from "../../productService";
+import {eventBus} from "../../app";
+
 export default {
     name: "order-single",
     props: [
@@ -50,16 +53,18 @@ export default {
             },
             set(value) {
                 this.orderQuant = value;
-                let orders = JSON.parse( localStorage.getItem('order'));
+                let orders = JSON.parse(
+                    productService.decrypt(
+                        localStorage.getItem('order')
+                    )
+                );
                 orders[this.index].amount = value;
-                localStorage.setItem('order', JSON.stringify(orders));
+                localStorage.setItem('order',
+                    productService.encrypt(
+                        JSON.stringify(orders)
+                    )
+                );
                 this.$emit('update:amount', value);
-
-                // axios.put('/api/carts/'+this.order.cartId+'?amount='+value)
-                //     .then( () => {
-                //         this.orderQuant = value;
-                //         this.$emit('update:amount', value);
-                //     });
             }
         }
     },
@@ -71,14 +76,18 @@ export default {
             });
         },
         deletePosition() {
-            let orders = JSON.parse( localStorage.getItem('order') );
+            let orders = JSON.parse(
+                productService.decrypt(
+                    localStorage.getItem('order')
+                )
+            );
             orders.splice(this.index, 1);
-            localStorage.setItem('order', JSON.stringify(orders));
+                localStorage.setItem('order', productService.encrypt(
+                    JSON.stringify(orders)
+                )
+            );
             this.$emit('deletePosition');
-            // axios.delete('/api/carts/'+this.order.cartId)
-            // .then( () => {
-            //     this.$emit('deletePosition');
-            // })
+            eventBus.$emit('itemsCartChange');
         }
     }
 }

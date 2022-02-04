@@ -196,30 +196,20 @@ export default {
         text-transform: uppercase;
         padding: 0.6rem 2rem;
         margin-bottom: 0.2rem;
-    }
-    button:first-child {
-        background-color: coral;
         color: white;
+        background-color: #665;
+        text-shadow: 0 0 5px #3ae6ca;
+        font-weight: 500;
     }
-button:first-child:hover {
+
+button:hover {
     cursor: pointer;
-    background-color: #f5a68a;
+    background-color: #888;
+    text-shadow: 0 0 10px #3ae6ca;;
 }
-button:first-child:active {
+button:active {
     cursor: pointer;
-    background-color: #9c4121;
-}
-button:last-child {
-    background-color: red;
-    color: white;
-}
-button:last-child:hover {
-    cursor: pointer;
-    background-color: #c27584;
-}
-button:last-child:active {
-    cursor: pointer;
-    background-color: #580b11;
+    background-color: #333;
 }
 button i{
     margin: 0 0.5rem;

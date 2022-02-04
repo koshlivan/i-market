@@ -3,20 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Exception;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Type\Integer;
+use function PHPUnit\Framework\isEmpty;
+use function PHPUnit\Framework\isNull;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     * @param Request $request
      * @return array
      */
-    public function index()
+    public function index(Request $request)
     {
         //todo separate functionality. return only categories
-        return Category::with('products')->get()->toArray();
+        $query = Category::query();
+        if( isset($request->products) ) {
+            //return Category::with('products')->get()->toArray();
+            $query->with('products');
+        }
+        if ( isset($request->sort) && isset($request->order) ) {
+            $query->orderBy($request->sort, $request->order);
+        }
+        //return $query->paginate($request->per_page, ['*'], 'page', $request->page);
+        //return Category::all()->toArray();
+        return $query->get()->toArray();
     }
 
     /**
@@ -29,9 +42,16 @@ class CategoryController extends Controller
     {
         //todo validate request before saving
         //todo show errors
-        $new_category = Category::create($request->all());
 
-        return $new_category;
+        $request->validate([
+            'name' => ['required', 'unique:categories']
+        ]);
+
+        $new_category = new Category();
+        $new_category->name = $request->name;
+        $new_category->save();
+
+        return Category::find($new_category->id);
     }
 
     /**
@@ -54,11 +74,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        $request->validate([
+            'name' => ['required', 'unique:categories']
+        ]);
         //todo add native laravel validation
+
         $category = Category::findOrFail($id);
-        if($request->name!='') {
-            $category->name = $request->name;
-        }
+        $category->name = $request->name;
 
         $category->update();
 
@@ -73,9 +95,13 @@ class CategoryController extends Controller
      */
     public function destroy(int $id)
     {
-        //show errors
-        Category::find($id)->delete();
-
-        return response(null, '204');
+        $category = Category::with('products')->find($id);
+        $arr = $category->products->toArray();
+        if ( count($arr) < 1 ) {
+            Category::find($id)->delete();
+            return response('', 204);
+        } else {
+            throw new Exception('Category has products');
+        }
     }
 }

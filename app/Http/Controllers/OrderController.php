@@ -31,13 +31,16 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $user = Auth::user();
+        $request->validate([
+            'user_id' => ['required'],
+        ]);
+       // $user = Auth::user();
         $order = new Order();
-        $order->user_id = $user;
-        $order->is_done = false;
+        $order->user_id = $request->user_id;
+        $order->is_done = $request->is_done;
         $order->save();
 
-        return $order;
+        return Order::with('carts')->find($order->id);
     }
 
     /**

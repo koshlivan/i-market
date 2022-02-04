@@ -39,11 +39,13 @@ class Product extends Model
     {
         return $this->hasOne(Attachment::class);
     }
+
     public static function boot() {
         parent::boot();
-
-        static::deleting(function($product) {
-            $product->options()->delete();
+        self::deleting(function($product) { // before delete() method call this
+            $product->options()->each(function($option) {
+                $option->delete(); // <-- direct deletion
+            });
         });
     }
 }

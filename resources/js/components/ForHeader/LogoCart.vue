@@ -16,6 +16,7 @@
 <script>
 import CartDropdown from "./CartDropdown";
 import {eventBus} from "../../app";
+import productService from "../../productService";
 export default {
     name: "logo-cart",
     components: {CartDropdown},
@@ -32,11 +33,7 @@ export default {
     created() {
         eventBus.$on('itemsCartChange', () => {
             this.totalItems();
-        })
-        eventBus.$on('addToCart', () => {
-            this.totalItems();
-        })
-        this.totalItems()
+        });
     },
     methods: {
         isOpenCart() {
@@ -44,16 +41,20 @@ export default {
             eventBus.$emit('cartOpened', this.isOpened);
         },
         totalItems() {
-            let orders = JSON.parse( localStorage.getItem('order'));
-            this.items = orders.length;
-
-            // axios.get('/api/orders/'+1)
-            // .then( response => {
-            //     console.log('cart total items: ', response.data);
-            //     this.itemsInCart = response.data.carts;
-            //     this.items = this.itemsInCart.length;
-            // })
+            if ( !localStorage.getItem('order') ) {
+                this.items = 0;
+            } else {
+                let orders = JSON.parse(
+                    productService.decrypt(
+                        localStorage.getItem('order')
+                    )
+                );
+                this.items = orders.length;
+            }
         }
+    },
+    mounted() {
+        this.totalItems()
     }
 }
 </script>

@@ -79,7 +79,11 @@ export default {
         if ( !localStorage.getItem('order') ) {
             orders = [];
         } else {
-            orders = JSON.parse(localStorage.getItem('order'));
+            orders = JSON.parse(
+                this.decrypt(
+                    localStorage.getItem('order')
+                )
+            );
         }
         const cart = {
             product_id : product,
@@ -91,11 +95,19 @@ export default {
         } else {
             orders[exist].amount = Number.parseInt(orders[exist].amount) + Number.parseInt(amount);
         }
-        localStorage.setItem('order', JSON.stringify(orders));
+        localStorage.setItem('order',
+            this.encrypt(
+                JSON.stringify(orders)
+            )
+        );
     },
     async cartItems() {
         let orders = [];
-        const carts = JSON.parse( localStorage.getItem('order') );
+        const carts = JSON.parse(
+            this.decrypt(
+                localStorage.getItem('order')
+            )
+        );
         for (let i = 0; i < carts.length ; i++) {
             let id = Number.parseInt(carts[i].product_id);
             const product = await this.getSingleProduct(id);
@@ -105,7 +117,12 @@ export default {
             }
             orders.push(order);
         }
-        console.log('services orders array: ', orders);
         return orders;
+    },
+    encrypt(someString) {
+        return CryptoJS.AES.encrypt(someString, '123').toString();
+    },
+    decrypt(someString) {
+        return CryptoJS.AES.decrypt(someString, '123').toString(CryptoJS.enc.Utf8);
     }
 }

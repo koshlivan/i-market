@@ -32,6 +32,11 @@
             <button @click="goShopping">continue shopping</button>
             <button @click="buyComplete">checkout</button>
         </div>
+        <div class="loading" v-show="loading">
+            <div class="spinner-border text-danger" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -40,6 +45,7 @@ import OrderSingle from "./OrderSingle";
 import PaymentOptions from "./PaymentOptions";
 import InvoiceThe from "./InvoiceThe";
 import productService from "../../productService";
+import {eventBus} from "../../app";
 export default {
     name: "order-list",
     components: {InvoiceThe, PaymentOptions, OrderSingle},
@@ -57,7 +63,8 @@ export default {
             isHasConfirmed : false,
             orders: [],
             products: [],
-            carts: []
+            carts: [],
+            loading: false
         }
     },
     computed: {
@@ -66,23 +73,10 @@ export default {
         },
     },
     created() {
-      //this.getAllValues()
+      eventBus.$on('itemsCartChange', () => {this.getOrders();})
         this.getOrders();
     },
     methods : {
-        async getAllValues() {
-            const response = await axios.get('/api/orders');
-
-                    this.orders = response.data;
-                    this.carts = this.orders[0].carts;
-                    this. products = await this.setProducts(this.carts);
-                    await this.fillOrders(this.carts, this.products);
-                    this.orderTotal.totalSum = this.calculateTotal();
-                    this.orderTotal.entireCost
-                        = this.orderTotal.totalSum
-                        + this.orderTotal.ecoTax
-                        + this.orderTotal.vat;
-        },
         getOrders() {
             productService.cartItems().then(orders => {
                 console.log('order list, promise: ', orders);
@@ -98,18 +92,42 @@ export default {
                     }
                     this.orderes.push(ord);
                     this.orderTotal.totalSum = this.calculateTotal();
+                    this.orderTotal.entireCost
+                        = this.orderTotal.totalSum
+                        + this.orderTotal.ecoTax
+                        + this.orderTotal.vat;
                 }
             });
         },
-        buyComplete() {
+       async buyComplete() {
+            if ( !localStorage.getItem('x_xsrf_token') ) {
+                alert('You have to log in to complete operation');
+            } else {
+                this.loading = true;
+                const user = await axios.get('/api/user');
+                const order = await axios.post('/api/orders?is_done=1&user_id='+user.data.id);
 
-            axios.put('/api/orders/'+2
-                +'?is_done='+true)
-            .then( () => {
+                for (let i = 0; i < this.orderes.length; i++) {
+                    const cart = {
+                        order: order.data.id,
+                        product: this.orders[i].product.id,
+                        amount: this.orderes[i].quantity
+                    }
+                    await this.fillCart(cart);
+                }
                 this.orderes = [];
+                localStorage.removeItem('order');
                 document.body.scrollTop = 0;
                 document.documentElement.scrollTop = 0;
                 this.isHasConfirmed = true;
+                this.loading = false;
+            }
+        },
+        fillCart(cart) {
+            return axios.post('/api/carts', {
+                order: cart.order,
+                product: cart.product,
+                amount: cart.amount
             })
         },
         closeConfirmed() {
@@ -228,5 +246,17 @@ h4 {
     font-weight: 600;
     font-size: 1.5rem;
     margin: 2rem 0;
+}
+.loading {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(128, 128, 128, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
 }
 </style>

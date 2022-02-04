@@ -14,6 +14,9 @@
 </template>
 
 <script>
+import productService from "../../productService";
+import {eventBus} from "../../app";
+
 export default {
     name: "cart-dropdown-item",
     props: [
@@ -21,7 +24,8 @@ export default {
     ],
     emits: [
         'update:amount',
-        'positionRemoved'
+        'positionRemoved',
+        'itemsCartChange'
     ],
     data() {
         return {
@@ -39,16 +43,21 @@ export default {
     },
     methods : {
         deletePosition() {
-            let orders = JSON.parse( localStorage.getItem('order') );
-            orders.splice(this.index, 1);
-            localStorage.setItem('order', JSON.stringify(orders));
-            this.$emit('positionRemoved');
-            // if ( confirm("Are you sure? Position will be deleted") ) {
-            //     axios.delete('/api/carts/'+this.position.cart_id)
-            //     .then( () => {
-            //         this.$emit('positionRemoved');
-            //     })
-            // }
+            if ( confirm("Are you sure? Position will be deleted") ) {
+                let orders = JSON.parse(
+                    productService.decrypt(
+                        localStorage.getItem('order')
+                    )
+                );
+                orders.splice(this.index, 1);
+                localStorage.setItem('order',
+                    productService.encrypt(
+                        JSON.stringify(orders)
+                    )
+                );
+                this.$emit('positionRemoved');
+                eventBus.$emit('itemsCartChange');
+            }
         }
     }
 }

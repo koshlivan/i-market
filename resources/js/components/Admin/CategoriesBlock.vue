@@ -1,14 +1,18 @@
 <template>
     <div class="categories-block">
+        <div class="categories-lines">
         <title-table @addNew="addNew">Categories Table</title-table>
         <add-category-line @addCategory="addCategory($event)"
                            v-show="addCategoryLine"
                            @cancelNew="cancelNew"></add-category-line>
-        <table-head-category></table-head-category>
-        <line-category v-for="(category, index) in categories"
-                       :key="category.id"
-                       @deleteOne="deleteOne(index)"
-                       :category="category"></line-category>
+            <div class="width-65">
+                <table-head-category @sortCategory="sortCategory($event)"></table-head-category>
+                <line-category v-for="(category, index) in categories"
+                               :key="category.id"
+                               @deleteOne="deleteOne(index)"
+                               :category="category"></line-category>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -30,7 +34,7 @@ export default {
         }
     },
     created() {
-        axios.get('api/categories')
+        axios.get('/api/categories')
         .then( response => {
             this.categories = response.data;
         })
@@ -47,6 +51,9 @@ export default {
         },
         deleteOne(index) {
             this.categories.splice(index, 1);
+        },
+        sortCategory(categories) {
+            this.categories = categories;
         }
     }
 }
@@ -59,5 +66,14 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
+}
+.categories-lines {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+.width-65 {
+    width: 65%;
 }
 </style>
