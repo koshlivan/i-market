@@ -1,117 +1,103 @@
 export default {
     getAllProducts() {
-       return axios.get('/api/products');
+        return axios.get('/api/products');
     },
 
     getPaginated(params) {
-      return axios.get('api/products', {params : params})
+        return axios.get('/api/products', {params: params})
     },
 
     getSorted(sorting) {
-        console.log('in get sorted sorting:', JSON.stringify(sorting));
-        return axios.get('api/products', {params : {
-                sort : sorting.sort,
-                order : sorting.order,
-            }})
-    },
-    isCartExist(order, product) {
-      return axios.get('/carts?order_id='+order
-                            +'&product_id='+product);
+        return axios.get('/api/products', {
+            params: {
+                sort: sorting.sort,
+                order: sorting.order,
+            }
+        })
     },
     getSingleProduct(id) {
-        //console.log('in service, id is: ', id);
-      return axios.get('/api/products/'+id);
+        return axios.get('/api/products/' + id);
     },
 
     getProductOptions(id) {
-      return axios.get('/api/product-options', {product: id});
+        return axios.get('/api/product-options', {params: {product: id}});
     },
 
     getReviewsAmount(product_id) {
-       return axios.get('/api/reviews', {params : {product_id : product_id}});
+        return axios.get('/api/reviews', {params: {product_id: product_id}});
     },
     createProduct(product) {
-       return axios.post('api/products', {
-                name: product.name,
-                price: product.price,
-                category_id: product.category_id,
-                code: product.code,
-                brand: product.brand,
-                rating: product.rating,
-                description: product.description
+        return axios.post('/api/products', {
+            name: product.name,
+            price: product.price,
+            category_id: product.category_id,
+            code: product.code,
+            brand: product.brand,
+            rating: product.rating,
+            description: product.description
         });
     },
     createProductOption(product_id, image, options) {
-        console.log('parameters, catched in servise: ', product_id, options, image);
-       return axios.post('api/product-options', {
-            image : image,
+        return axios.post('/api/product-options', {
+            image: image,
             name: options,
             product_id: product_id
         });
     },
     editProduct(product) {
-      return axios.put('api/products/'+product.id, {
-          name: product.name,
-          price: product.price,
-          code: product.code,
-          brand: product.brand,
-          description: product.description
-      })
+        return axios.put('/api/products/' + product.id, {
+            name: product.name,
+            price: product.price,
+            code: product.code,
+            brand: product.brand,
+            description: product.description
+        })
     },
-    addToCart(order, product, amount=1) {
-        if ( confirm('Add this product to the cart?') ) {
-            console.log(JSON.stringify(this.isCartExist(order, product)));
-            //if ( this.isCartExist(order, product).data !== '') return;
-            console.log('come through if');
-            axios.post('/api/carts?product='
-                + product + '&amount='
-                + amount + '&order=' + order
-            )
-                .then(response => {
-                    let name = response.data.product.name;
-                    alert(name+' was added to the cart');
-                })
-                .catch(errors => console.log(errors));
+    addToCart(order, product, amount = 1) {
+        if (!confirm('Add this product to the cart?')) {
+            return;
         }
+        //todo refactore to params
+        axios.post('/api/carts', {
+            product: product,
+            amount: amount,
+            order: order
+        })
+            .then(response => {
+                let name = response.data.product.name;
+                alert(name + ' was added to the cart');
+            })
+            .catch(errors => console.log(errors.response.data.message));
     },
-    addToCartLocal(product, amount=1) {
+    addToCartLocal(product, amount = 1) {
         let orders = [];
         if ( !localStorage.getItem('order') ) {
             orders = [];
         } else {
-            orders = JSON.parse(
-                this.decrypt(
-                    localStorage.getItem('order')
-                )
-            );
+            orders = JSON.parse( localStorage.getItem('order') );
         }
-        const cart = {
-            product_id : product,
-            amount : amount
+        //todo investigate difference between var let const and how to use
+        let cart = {
+            product_id: product,
+            amount: amount
         }
-        let exist = orders.findIndex(cart => cart.product_id === product);
+        let exist = orders.findIndex( cart => cart.product_id === product );
         if (exist < 0) {
             orders.push(cart);
         } else {
             orders[exist].amount = Number.parseInt(orders[exist].amount) + Number.parseInt(amount);
         }
-        localStorage.setItem('order',
-            this.encrypt(
-                JSON.stringify(orders)
-            )
-        );
+        localStorage.setItem('order', JSON.stringify(orders));
     },
     async cartItems() {
         let orders = [];
-        const carts = JSON.parse(
-            this.decrypt(
-                localStorage.getItem('order')
-            )
-        );
-        for (let i = 0; i < carts.length ; i++) {
+        if ( !localStorage.getItem('order') ) return orders;
+
+        let carts = JSON.parse(localStorage.getItem('order'));
+        for (let i = 0; i < carts.length; i++) {
             let id = Number.parseInt(carts[i].product_id);
-            const product = await this.getSingleProduct(id);
-            const order = {
+            let product = await this.getSingleProduct(id);
+            let order = {
                 product: product.data,
                 amount: carts[i].amount
             }
@@ -119,10 +105,18 @@ export default {
         }
         return orders;
     },
-    encrypt(someString) {
-        return CryptoJS.AES.encrypt(someString, '123').toString();
-    },
-    decrypt(someString) {
-        return CryptoJS.AES.decrypt(someString, '123').toString(CryptoJS.enc.Utf8);
+    getCategoryWithProducts(category) {
+        return axios.get('/api/categories/' + category, {params :{
+                products: true
+            }});
     }
+    //todo remove
+
+    // encrypt(someString) {
+    //     return CryptoJS.AES.encrypt(someString, '123').toString();
+    // },
+    // decrypt(someString) {
+    //     return CryptoJS.AES.decrypt(someString, '123').toString(CryptoJS.enc.Utf8);
+    // },
+
 }

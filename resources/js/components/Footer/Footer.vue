@@ -6,8 +6,9 @@
 </template>
 
 <script>
-import FooterHeader from "./FooterHeader";
+import FooterHeader from "./FooterTop";
 import FooterMap from "./FooterMap";
+
 export default {
     name: "my-footer",
     components: {FooterMap, FooterHeader}
@@ -15,8 +16,8 @@ export default {
 </script>
 
 <style scoped>
-    .my-footer {
-        background-color: rgb(66, 66, 66);
-        max-width: 100%;
-    }
+.my-footer {
+    background-color: rgb(66, 66, 66);
+    max-width: 100%;
+}
 </style>

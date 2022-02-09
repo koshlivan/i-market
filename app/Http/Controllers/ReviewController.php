@@ -25,6 +25,12 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'reviewer' => ['required', 'max:255'],
+            'rating' => ['min:1', 'max:5'],
+            'product_id' => ['required']
+        ]);
+
         $review = new Review();
         $review->product_id = $request->product_id;
         $review->reviewer = $request->reviewer;

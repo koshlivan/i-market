@@ -4,7 +4,7 @@
         <a v-for="(category, index) in categories"
            :key="index"
            href="#" @click.prevent="chooseCategory(category.id)"
-            :title="category.name">{{category.name}}</a>
+           :title="category.name">{{ category.name }}</a>
         <slot></slot>
         <a href="#">
             <img src="/assets/SideMenu/side.jpg" alt="">
@@ -16,9 +16,9 @@
 export default {
     name: "side-menu",
     emits: [
-      'categoryClicked'
+        'categoryClicked'
     ],
-    data(){
+    data() {
         return {
             categories: []
         }
@@ -51,12 +51,14 @@ export default {
     align-items: stretch;
     width: 100%;
 }
+
 h3 {
     text-transform: uppercase;
     font-weight: bolder;
     color: white;
     border-bottom: solid 2px rgb(66, 66, 66);
 }
+
 a {
     text-transform: capitalize;
     text-decoration: none;
@@ -65,13 +67,16 @@ a {
     padding-bottom: 0.2rem;
     border-bottom: dotted 1px rgb(66, 66, 66);
 }
+
 a:hover {
     cursor: pointer;
     color: #e53a53;
 }
+
 a:active {
     color: #790b30;
 }
+
 img {
     max-width: 100%;
     margin: 0.5rem 0;

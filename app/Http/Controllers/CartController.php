@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CartRequest;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 
@@ -9,34 +10,32 @@ class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *@param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-            if ( isset($request->product_id) && isset($request->order_id) ) {
-                return Cart::where('product_id', $request->product_id)->where('order_id', $request->order_id)->get();
-            }
-            if ( isset($request->order_id) )
-            {
-                return Cart::with('product.options')->where('order_id', $request->order_id)->get();
-            }
-        return Cart::with('product.options')->get();
+        $query = Cart::with('product.options');
+        if (isset($request->product_id) && isset($request->order_id)) {
+            $query->where('order_id', $request->order_id);
+        }
+        if (isset($request->order_id)) {
+            $query->where('order_id', $request->order_id);
+        }
+        $query->limit(500);
+
+        return $query->get();
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param CartRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CartRequest $request)
     {
-        $request->validate([
-            'order' => ['required'],
-            'product' => ['required'],
-            'amount' => ['required']
-        ]);
+        $request->validated();
 
         $cart = new Cart();
         $cart->order_id = $request->order;
@@ -44,14 +43,16 @@ class CartController extends Controller
         $cart->amount = $request->amount;
 
         $cart->save();
+        $cart->load('product.options');
+        $cart->refresh();
 
-        return Cart::with('product')->find($cart->id);
+        return $cart;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
@@ -62,26 +63,28 @@ class CartController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @param App\Models\Cart $cart
-     * @param  \Illuminate\Http\Request  $request
+     *
+     * @param CartRequest $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $id)
+    public function update(CartRequest $request, int $id)
     {
         $cart = Cart::findOrFail($id);
 
-        if($request->amount !== '') {
-            $cart->amount = $request->amount;
-            $cart->update();
-        }
-        return Cart::find($id);
+        $request->validated();
+
+        $cart->amount = $request->amount ?? $cart->amount;
+        $cart->save();
+
+        $cart->refresh();
+        return $cart;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(int $id)

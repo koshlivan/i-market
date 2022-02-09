@@ -14,22 +14,19 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      * @param Request $request
-     * @return array
+     * @return Response
      */
     public function index(Request $request)
     {
         //todo separate functionality. return only categories
         $query = Category::query();
         if( isset($request->products) ) {
-            //return Category::with('products')->get()->toArray();
-            $query->with('products');
+            $query->with('products.options');
         }
         if ( isset($request->sort) && isset($request->order) ) {
             $query->orderBy($request->sort, $request->order);
         }
-        //return $query->paginate($request->per_page, ['*'], 'page', $request->page);
-        //return Category::all()->toArray();
-        return $query->get()->toArray();
+        return $query->get();
     }
 
     /**
@@ -40,8 +37,6 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //todo validate request before saving
-        //todo show errors
 
         $request->validate([
             'name' => ['required', 'unique:categories']
@@ -50,19 +45,25 @@ class CategoryController extends Controller
         $new_category = new Category();
         $new_category->name = $request->name;
         $new_category->save();
+        $new_category->refresh();
 
-        return Category::find($new_category->id);
+
+        return $new_category;
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param  \App\Models\Category  $category
+     * @param Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show(Request $request, int $id)
     {
-        //
+        if ( isset($request->products) ) {
+            return Category::with('products.options')->findOrFail($id);
+        }
+
+        return Category::findOrFail($id);
     }
 
     /**
@@ -77,12 +78,11 @@ class CategoryController extends Controller
         $request->validate([
             'name' => ['required', 'unique:categories']
         ]);
-        //todo add native laravel validation
 
         $category = Category::findOrFail($id);
         $category->name = $request->name;
 
-        $category->update();
+        $category->save();
 
         return Category::find($id);
     }
@@ -101,7 +101,7 @@ class CategoryController extends Controller
             Category::find($id)->delete();
             return response('', 204);
         } else {
-            throw new Exception('Category has products');
+            throw new Exception('This category has products');
         }
     }
 }

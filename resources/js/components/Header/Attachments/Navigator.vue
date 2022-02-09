@@ -1,0 +1,215 @@
+<template>
+    <nav class="navbar">
+        <div class="burger">
+            <h2>menu</h2>
+            <i class="fas fa-bars" title="Menu" @click="showTinyMenu"></i>
+            <menu-tiny v-show="isTiny"></menu-tiny>
+        </div>
+        <ul id="menu" class="nav navbar-nav">
+            <li>
+                <router-link tag="a" class="link-to" to="/">Home</router-link>
+            </li>
+            <li class="collection-dropdown">
+                <a href="#"
+                   @mouseleave="collectionButHide"
+                   @mouseover="collectionButShow">Collection
+                </a>
+            </li>
+            <li>
+                <router-link tag="a" class="link-to" to="/shop">Shop</router-link>
+            </li>
+            <li><a href="blog_page.html">Blog</a></li>
+            <li class="dropdown">
+                <a href="#"
+                   @mouseleave="pagesButHide"
+                   @mouseover="pagesButShow">Pages
+                </a>
+
+            </li>
+            <li>
+                <router-link tag="a" class="link-to" to="/about">About Us</router-link>
+            </li>
+            <li>
+                <router-link tag="a" class="link-to" to="/contacts">Contact Us</router-link>
+            </li>
+        </ul>
+        <collection-popup v-show="collectionHover" @mouseover="collectionPopupShow"
+                          @mouseleave="collectionPopupHide"></collection-popup>
+        <pages-popup v-show="pagesHover" @mouseover="pagesPopupShow" @mouseleave="pagesPopupHide"></pages-popup>
+    </nav>
+</template>
+
+<script>
+import CollectionPopup from "./CollectionPopup";
+import PagesPopup from "./PagesPopup";
+import MenuTiny from "./MenuTiny";
+
+export default {
+    name: "Navigator",
+    components: {MenuTiny, PagesPopup, CollectionPopup},
+    data() {
+        return {
+            collectionButHover: false,
+            collectionPopupHover: false,
+            pagesButHover: false,
+            pagesPopupHover: false,
+            isTiny: false
+        }
+    },
+    computed: {
+        collectionHover() {
+            if (this.collectionButHover || this.collectionPopupHover) {
+                return true;
+            }
+            if (!this.collectionButHover && !this.collectionPopupHover) {
+                return false;
+            }
+        },
+        pagesHover() {
+            if (this.pagesButHover || this.pagesPopupHover) {
+                return true;
+            }
+            if (!this.pagesButHover && !this.pagesPopupHover) {
+                return false;
+            }
+        }
+    },
+    methods: {
+        collectionButShow() {
+            this.collectionButHover = true;
+        },
+        collectionPopupShow() {
+            this.collectionPopupHover = true;
+        },
+        collectionButHide() {
+            this.collectionButHover = false;
+        },
+        collectionPopupHide() {
+            this.collectionPopupHover = false;
+        },
+        pagesPopupShow() {
+            this.pagesPopupHover = true;
+        },
+        pagesButShow() {
+            this.pagesButHover = true;
+        },
+        pagesPopupHide() {
+            this.pagesPopupHover = false;
+        },
+        pagesButHide() {
+            this.pagesButHover = false;
+        },
+        showTinyMenu() {
+            this.isTiny = !this.isTiny;
+        }
+    }
+}
+</script>
+
+<style scoped>
+.navbar {
+    min-height: 4rem;
+    width: 100%;
+    background-color: rgb(66, 66, 66);
+    position: relative;
+}
+
+.navbar > p {
+    text-transform: uppercase;
+    color: rgb(200, 200, 200);
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+    vertical-align: center;
+    font-weight: 800;
+    font-size: 1.2rem;
+}
+
+.navbar-toggle span {
+    font-size: 2rem;
+    vertical-align: middle;
+}
+
+#menu {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: stretch;
+}
+
+#menu li {
+    min-height: 100%;
+    margin: 0;
+}
+
+#menu li a {
+    text-transform: uppercase;
+    color: rgb(200, 200, 200);
+    text-decoration: none;
+    text-align: center;
+    padding: 1rem 0.5rem;
+    font-weight: 600;
+    margin: 0 0.1rem;
+}
+
+#menu li:hover a {
+    cursor: pointer;
+    background-color: #e53a53;
+}
+
+.collection-dropdown-menu ul {
+    list-style-type: none;
+    list-style-image: none;
+}
+
+.collection-dropdown-menu a {
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 400;
+    text-transform: none;
+    padding: 0;
+    margin: 0;
+}
+
+.popup-column li a {
+    text-align: left;
+    font-weight: 400;
+    text-transform: none;
+    margin: 0.5rem 0;
+    padding: 0;
+}
+.burger {
+    text-transform: uppercase;
+    color: white;
+    display: none;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    width: 100%;
+    position: relative;
+}
+.burger i {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+}
+.burger i:hover {
+    cursor: pointer;
+    color: #aaa;
+}
+.burger i:active {
+    color: #555;
+}
+.burger h2 {
+    margin-left: 0.5rem;
+}
+
+@media screen and (max-width: 640px) {
+    .burger {
+        display: flex;
+    }
+    #menu {
+        display: none;
+    }
+}
+</style>

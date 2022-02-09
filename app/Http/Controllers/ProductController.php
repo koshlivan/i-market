@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -29,16 +30,13 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param ProductRequest $request
      * @return Product
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $request->validate([
-           'name' => ['max:255', 'required'],
-            'rating' => ['min:0', 'max:5'],
-            'code' => ['unique:products']
-        ]);
+        $request->validated();
+
         return Product::create($request->all());
     }
 
@@ -60,32 +58,27 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      * @param int $id
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Product $product
+     * @param ProductRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, int $id)
     {
+        //todo validation
+        $request->validated();
+
         $product = Product::findOrFail($id);
-        if ($request->name != '') {
-            $product->name = $request->name;
-        }
-        if ($request->price != '') {
-            $product->price = $request->price;
-        }
-        if ($request->brand != '') {
-            $product->brand = $request->brand;
-        }
-        if ($request->code != '') {
-            $product->code = $request->code;
-        }
-        if ($request->description != '') {
-            $product->description = $request->description;
-        }
+        $product->name = $request->name ?? $product->name;
+        $product->price = $request->price ?? $product->price;
+        $product->brand = $request->brand ?? $product->brand;
+        $product->code = $request->code ?? $product->code;
+        $product->description = $request->description ?? $product->description;
+
 
         $product->update();
+        $product->with('options');
+        $product->refresh();
 
-        return Product::find($id);
+        return $product;
     }
 
     /**
@@ -94,9 +87,9 @@ class ProductController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
-        Product::find($id)->delete();
+        Product::destroy($id);
 
         return response(null, '204');
 

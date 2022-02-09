@@ -1,15 +1,12 @@
-import productService from "./productService";
-
-export default  {
-    data () {
+export default {
+    data() {
         return {
-            products : [],
+            products: [],
             currentPage: 1,
             amount: 1
         }
     },
     created() {
-       // productService.getAllProducts()
         axios.get('/api/products')
             .then((response) => {
                 this.products = response.data.data;

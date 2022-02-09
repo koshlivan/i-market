@@ -42,6 +42,7 @@ Route::post('attachments', [AttachmentController::class, 'store']);
 Route::post('users/register', [UserController::class, 'store']);
 Route::post('users/login', [UserController::class, 'login']);
 Route::post('users/logout', [UserController::class, 'destroy']);
+Route::post('mail', [\App\Http\Controllers\MailSendController::class, 'store']);
 
 
 

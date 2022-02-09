@@ -14,7 +14,6 @@ class ProductOptionController extends Controller
      */
     public function index(Request $request)
     {
-       // return $request;
         return ProductOption::query()->where('product_id' , $request->product)->get();
     }
 
