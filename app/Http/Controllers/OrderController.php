@@ -21,8 +21,9 @@ class OrderController extends Controller
             $query->where('user_id', '=', $request->user_id)
                 ->where('is_done', '<', $request->is_done);
         }
-            $query->limit(500);
-            $query->get();
+
+        //$query->limit(500);
+        $query->get();
     }
 
     /**

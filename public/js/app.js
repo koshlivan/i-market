@@ -5727,10 +5727,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "paginator-the",
   props: ['amount', 'currentPage'],
   emits: ['pagePicked', 'next'],
+  data: function data() {
+    return {
+      pages: {
+        start: 0
+      }
+    };
+  },
+  watch: {
+    currentPage: function currentPage() {
+      if (this.amount > 10 && this.currentPage > 9) {
+        if (this.currentPage <= this.amount - 5) {
+          this.pages.start = this.currentPage - 4;
+        } else {
+          this.pages.start = this.amount - 9;
+        }
+      } else {
+        this.pages.start = 0;
+      }
+    }
+  },
+  computed: {
+    showed: function showed() {
+      if (this.amount > 10) {
+        return 9;
+      }
+
+      return this.amount;
+    },
+    isMany: function isMany() {
+      if (this.amount > 10) {
+        return true;
+      }
+
+      return false;
+    }
+  },
   methods: {
     clickNext: function clickNext() {
       if (this.currentPage < this.amount) {
@@ -5969,7 +6014,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     imgHover: function imgHover() {
-      if (this.product.options[1].image !== '') {
+      if (this.product.options[1] != null && this.product.options[1].image !== '') {
         this.image = this.product.options[1].image;
       }
     },
@@ -47291,19 +47336,53 @@ var render = function () {
         [_c("i", { staticClass: "fas fa-chevron-left" })]
       ),
       _vm._v(" "),
+      _vm._l(_vm.showed, function (index) {
+        return _c(
+          "a",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.isMany,
+                expression: "isMany",
+              },
+            ],
+            class: { active: index + _vm.pages.start === _vm.currentPage },
+            attrs: { href: "#" },
+            on: {
+              click: function ($event) {
+                $event.preventDefault()
+                return _vm.$emit("pagePicked", _vm.pages.start + index)
+              },
+            },
+          },
+          [_vm._v("\n        " + _vm._s(_vm.pages.start + index) + "\n    ")]
+        )
+      }),
+      _vm._v(" "),
       _vm._l(_vm.amount, function (index) {
         return _c(
           "a",
           {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: !_vm.isMany,
+                expression: "!isMany",
+              },
+            ],
             class: { active: index === _vm.currentPage },
             attrs: { href: "#" },
             on: {
               click: function ($event) {
+                $event.preventDefault()
                 return _vm.$emit("pagePicked", index)
               },
             },
           },
-          [_vm._v(_vm._s(index))]
+          [_vm._v("\n        " + _vm._s(index) + "\n    ")]
         )
       }),
       _vm._v(" "),

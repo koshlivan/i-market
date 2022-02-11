@@ -4,9 +4,18 @@
            :class="{inactive : currentPage === 1}">
             <i class="fas fa-chevron-left"></i>
         </a>
-        <a href="#" v-for="index in amount"
-           @click="$emit('pagePicked', index)"
-           :class="{active : index=== currentPage}">{{ index }}</a>
+        <a href="#" v-show="isMany" v-for="(index) in showed"
+           @click.prevent="$emit('pagePicked', pages.start + index)"
+           :class="{active : index + pages.start === currentPage}">
+            {{ pages.start + index }}
+        </a>
+
+        <a href="#" v-show="!isMany" v-for="index in amount"
+           @click.prevent="$emit('pagePicked', index)"
+           :class="{active : index=== currentPage}">
+            {{ index }}
+        </a>
+
         <a href="#" @click.prevent="clickNext"
            :class="{inactive : currentPage === amount}">
             <i class="fas fa-chevron-right"></i>
@@ -26,6 +35,40 @@ export default {
         'pagePicked',
         'next'
     ],
+    data() {
+      return {
+          pages: {
+              start: 0,
+          }
+      }
+    },
+    watch: {
+        currentPage : function() {
+            if (this.amount > 10 && this.currentPage > 9) {
+                if ( this.currentPage <= this.amount - 5) {
+                    this.pages.start = this.currentPage - 4;
+                } else {
+                    this.pages.start = this.amount - 9;
+                }
+            } else {
+                this.pages.start = 0;
+            }
+        }
+    },
+    computed: {
+      showed() {
+          if (this.amount > 10) {
+              return 9;
+          }
+          return this.amount;
+      },
+        isMany() {
+            if (this.amount > 10) {
+                return true;
+            }
+            return false;
+        }
+    },
     methods: {
         clickNext() {
             if (this.currentPage < this.amount) {
@@ -36,7 +79,7 @@ export default {
             if (this.currentPage > 1) {
                 this.$emit('next', false);
             }
-        }
+        },
     }
 }
 </script>

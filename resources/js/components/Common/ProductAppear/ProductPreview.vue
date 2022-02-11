@@ -56,7 +56,7 @@ export default {
     },
     methods: {
         imgHover() {
-            if (this.product.options[1].image !== '') {
+            if (this.product.options[1]!=null && this.product.options[1].image !== '') {
                 this.image = this.product.options[1].image;
             }
         },

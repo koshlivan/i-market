@@ -42,7 +42,11 @@ Route::post('attachments', [AttachmentController::class, 'store']);
 Route::post('users/register', [UserController::class, 'store']);
 Route::post('users/login', [UserController::class, 'login']);
 Route::post('users/logout', [UserController::class, 'destroy']);
-Route::post('mail', [\App\Http\Controllers\MailSendController::class, 'store']);
+Route::post('mail', [\App\Http\Controllers\Jobs\SendPurchasesController::class, 'store']);
+Route::get('mail', [\App\Http\Controllers\Jobs\SendPurchasesController::class, 'show']);
+Route::get('to-category', [\App\Http\Controllers\Jobs\ProductToCategoryController::class, 'testing']);
+Route::post('to-category', [\App\Http\Controllers\Jobs\ProductToCategoryController::class, 'store']);
+Route::post('mail-gen', [\App\Http\Controllers\Jobs\GenerateMailJobsController::class, 'store']);
 
 
 
